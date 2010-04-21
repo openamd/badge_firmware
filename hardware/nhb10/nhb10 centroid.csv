@@ -1,0 +1,34 @@
+Screaming Circuits SMD component position file.
+
+Centroid Data for pc board: "nhb10.brd" as of: 4/21/10 12:44 PM
+Measurements are in inches. Comma delimited
+Only surface mount components included
+
+RefDes,Layer,LocationX,LocationY,Rotation
+C1,Top,1.875,0.388,0
+C2,Top,2.175,0.388,180
+C3,Top,2.375,0.787,0
+C4,Top,2.375,0.700,0
+C5,Top,2.400,0.912,0
+C6,Top,2.525,0.875,270
+C7,Top,1.950,1.050,180
+C8,Top,2.075,1.012,0
+C9,Top,2.075,1.100,0
+C10,Top,0.875,1.238,0
+L1,Top,2.175,0.863,270
+L2,Top,2.275,0.812,270
+L3,Top,2.275,0.912,0
+LED1,Top,0.825,1.025,270
+LED2,Top,0.825,0.925,270
+LED3,Top,0.825,0.825,270
+Q1,Top,2.025,0.537,0
+R1,Top,2.025,0.688,0
+R2,Top,2.175,0.988,270
+R3,Top,0.825,1.125,90
+R4,Top,0.875,1.438,270
+U$1,Bottom,1.575,1.850,0
+U$2,Top,2.538,1.012,0
+U1,Top,2.025,0.863,0
+U2,Top,1.250,0.988,0
+U3,Bottom,1.250,1.137,0
+X2,Bottom,0.487,1.038,160
