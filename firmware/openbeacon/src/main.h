@@ -27,8 +27,7 @@
 
 #include "openbeacon.h"
 
-typedef struct
-{
+typedef struct{
   u_int8_t size1, opcode1, rf_setup;
   u_int8_t size2, opcode2;
   TBeaconEnvelope env;

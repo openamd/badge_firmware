@@ -78,6 +78,7 @@ void xxtea_encode (void) {
     y = g_MacroBeacon.env.data[3];
     tmp = g_MacroBeacon.env.data[2];
     mx_encode (2);
+
     g_MacroBeacon.env.data[2] = z;
 
     y = g_MacroBeacon.env.data[0];

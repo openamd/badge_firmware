@@ -33,6 +33,8 @@
 #define	CONFIG_DEBUG_LED
 #define CONFIG_DELAYUS
 
+
+//TEA is off for now.
 #define CONFIG_TEA_ENABLEENCODE
 //#define CONFIG_TEA_ENABLEDECODE
 

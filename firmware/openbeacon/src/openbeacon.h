@@ -40,17 +40,23 @@
 
 
 //No need to typedef what's standard on msp430.
-//typedef unsigned char u_int8_t;
-//typedef unsigned short u_int16_t;
-//typedef unsigned long u_int32_t;
+//#include <types.h>
+#include <signal.h>
+#include <io.h>
+#include <iomacros.h>
+#include <stdlib.h>
 
-typedef struct
-{
+/* Defined by stdlib.h on MSP430
+typedef unsigned char u_int8_t;
+typedef unsigned short u_int16_t;
+typedef unsigned long u_int32_t;
+*/
+
+typedef struct{
   u_int8_t size, proto;
 } TBeaconHeader;
 
-typedef struct
-{
+typedef struct{
   TBeaconHeader hdr;
   u_int8_t flags, strength;
   u_int32_t seq;
@@ -59,8 +65,7 @@ typedef struct
   u_int16_t crc;
 } TBeaconTracker;
 
-typedef union
-{
+typedef union{
   TBeaconTracker pkt;
   u_int32_t data[TEA_ENCRYPTION_BLOCK_COUNT];
   u_int8_t datab[TEA_ENCRYPTION_BLOCK_COUNT * sizeof (u_int32_t)];

@@ -78,9 +78,7 @@ htons (unsigned short src)
 			g_MacroBeacon.env.datab[a]=g_MacroBeacon.env.datab[b];\
 			g_MacroBeacon.env.datab[b]=tmp;
 
-void
-shuffle_tx_byteorder (void)
-{
+void shuffle_tx_byteorder (void) {
   unsigned char tmp;
 
   SHUFFLE (0 + 0, 3 + 0);
@@ -93,33 +91,28 @@ shuffle_tx_byteorder (void)
   SHUFFLE (1 + 12, 2 + 12);
 }
 
-unsigned short
-crc16 (const unsigned char *buffer, unsigned char size)
-{
+unsigned short crc16 (const unsigned char *buffer, unsigned char size){
   unsigned short crc = 0xFFFF;
-  if (buffer)
-    {
-      while (size--)
-	{
-	  crc = (crc >> 8) | (crc << 8);
-	  crc ^= *buffer++;
-	  crc ^= ((unsigned char) crc) >> 4;
-	  crc ^= crc << 12;
-	  crc ^= (crc & 0xFF) << 5;
-	}
+  if (buffer) {
+    while (size--) {
+      crc = (crc >> 8) | (crc << 8);
+      crc ^= *buffer++;
+      crc ^= ((unsigned char) crc) >> 4;
+      crc ^= crc << 12;
+      crc ^= (crc & 0xFF) << 5;
     }
+  }
   return crc;
 }
 
 void store_incremented_codeblock (void) {
-  if (code_block < 0xFFFF)
-    {
-      code_block++;
-      //EEPROM_WRITE (0, (u_int8_t) (code_block));
-      sleep_jiffies (10 * TIMER1_JIFFIES_PER_MS);
-      //EEPROM_WRITE (1, (u_int8_t) (code_block >> 8));
-      sleep_jiffies (10 * TIMER1_JIFFIES_PER_MS);
-    }
+  if (code_block < 0xFFFF) {
+    code_block++;
+    //EEPROM_WRITE (0, (u_int8_t) (code_block));
+    sleep_jiffies (10 * TIMER1_JIFFIES_PER_MS);
+    //EEPROM_WRITE (1, (u_int8_t) (code_block >> 8));
+    sleep_jiffies (10 * TIMER1_JIFFIES_PER_MS);
+  }
 }
 
 //TODO move this to a separate header.
