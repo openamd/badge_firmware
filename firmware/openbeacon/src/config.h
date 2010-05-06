@@ -98,7 +98,7 @@
 
 
 
-//TODO fill these in.
+// Port definitions, replacing PICC ones.
 #define CONFIG_PIN_CSN_HIGH P5OUT|=CSN
 #define CONFIG_PIN_CSN_LOW P5OUT&=~CSN
 #define CONFIG_PIN_CE_HIGH P5OUT|=CE
@@ -108,6 +108,9 @@
 #define CONFIG_PIN_SCK_HIGH P5OUT|=SCK
 #define CONFIG_PIN_SCK_LOW P5OUT&=~SCK
 #define CONFIG_PIN_MISO (P5IN&MISO?1:0)
+
+// TODO fix EEPROM stuff to use info B.
+#define EEPROM_READ(x) (0)
 
 /***************************************************************
  *

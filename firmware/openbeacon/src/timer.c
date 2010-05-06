@@ -105,10 +105,9 @@ void interrupt
 irq (void)
 {
   /* timer1 has overflowed */
-  if (TMR1IF)
-    {
-      timer1_wrapped = 1;
-      TMR1ON = 0;
-      TMR1IF = 0;
-    }
+  if (TMR1IF){
+    timer1_wrapped = 1;
+    TMR1ON = 0;
+    TMR1IF = 0;
+  }
 }

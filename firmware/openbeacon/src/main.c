@@ -122,7 +122,7 @@ void store_incremented_codeblock (void) {
     }
 }
 
-//TODO move this to a header.
+//TODO move this to a separate header.
 void msp430_init_dco();
 
 int main (void){
@@ -143,7 +143,8 @@ int main (void){
   
   nRFCMD_Init ();
 
-  IOCA = IOCA | (1 << 0);
+  //PIC thing, not sure what this did.
+  //IOCA = IOCA | (1 << 0); 
 
   // increment code block after power cycle
   ((unsigned char *) &code_block)[0] = EEPROM_READ (0);
@@ -159,61 +160,62 @@ int main (void){
 
   i = 0;
   if (code_block != 0xFFFF)
-    while (1)
-      {
-	g_MacroBeacon.rf_setup = NRF_RFOPTIONS | ((i & 3) << 1);
-	g_MacroBeacon.env.pkt.hdr.size = sizeof (TBeaconTracker);
-	g_MacroBeacon.env.pkt.hdr.proto = RFBPROTO_BEACONTRACKER;
-	g_MacroBeacon.env.pkt.flags = CONFIG_PIN_SENSOR ? 0 : RFBFLAGS_SENSOR;
-	g_MacroBeacon.env.pkt.strength = 0x55 * (i & 0x3);
-	g_MacroBeacon.env.pkt.seq = htonl (seq++);
-	g_MacroBeacon.env.pkt.oid = htonl (oid);
-	g_MacroBeacon.env.pkt.reserved = 0;
-	crc = crc16 (g_MacroBeacon.env.datab,
-		     sizeof (g_MacroBeacon.env.pkt) -
-		     sizeof (g_MacroBeacon.env.pkt.crc));
-	g_MacroBeacon.env.pkt.crc = htons (crc);
-
-	// update code_block so on next power up
-	// the seq will be higher or equal
-	crc = seq >> 16;
-	if (crc == 0xFFFF)
-	  break;
-	if (crc == code_block)
-	  store_incremented_codeblock ();
-
-	// encrypt my data
-	shuffle_tx_byteorder ();
-	xxtea_encode ();
-	shuffle_tx_byteorder ();
-
-	// reset touch sensor pin
-	TRISA = CONFIG_CPU_TRISA & ~0x02;
-	CONFIG_PIN_SENSOR = 0;
-	sleep_jiffies (10 + (rand () % (400 * TIMER1_JIFFIES_PER_MS)));
-	CONFIG_PIN_SENSOR = 1;
-	TRISA = CONFIG_CPU_TRISA;
-
-	// send it away
-	nRFCMD_Macro ((unsigned char *) &g_MacroBeacon);
-	status = (i & 0x7) == 0;
-
-	if (status)
-	  CONFIG_PIN_LED = 1;
-	nRFCMD_Execute ();
-	if (status)
-	  CONFIG_PIN_LED = 0;
-
-	i++;
-      }
-
+    while (1){
+      g_MacroBeacon.rf_setup = NRF_RFOPTIONS | ((i & 3) << 1);
+      g_MacroBeacon.env.pkt.hdr.size = sizeof (TBeaconTracker);
+      g_MacroBeacon.env.pkt.hdr.proto = RFBPROTO_BEACONTRACKER;
+      // TODO g_MacroBeacon.env.pkt.flags = CONFIG_PIN_SENSOR ? 0 : RFBFLAGS_SENSOR;
+      g_MacroBeacon.env.pkt.strength = 0x55 * (i & 0x3);
+      g_MacroBeacon.env.pkt.seq = htonl (seq++);
+      g_MacroBeacon.env.pkt.oid = htonl (oid);
+      g_MacroBeacon.env.pkt.reserved = 0;
+      crc = crc16 (g_MacroBeacon.env.datab,
+		   sizeof (g_MacroBeacon.env.pkt) -
+		   sizeof (g_MacroBeacon.env.pkt.crc));
+      g_MacroBeacon.env.pkt.crc = htons (crc);
+      
+      // update code_block so on next power up
+      // the seq will be higher or equal
+      crc = seq >> 16;
+      if (crc == 0xFFFF)
+	break;
+      if (crc == code_block)
+	store_incremented_codeblock ();
+      
+      // encrypt my data
+      shuffle_tx_byteorder ();
+      xxtea_encode ();
+      shuffle_tx_byteorder ();
+      
+      /*
+      // reset touch sensor pin
+      //TODO 
+      TRISA = CONFIG_CPU_TRISA & ~0x02;
+      CONFIG_PIN_SENSOR = 0;
+      sleep_jiffies (10 + (rand () % (400 * TIMER1_JIFFIES_PER_MS)));
+      CONFIG_PIN_SENSOR = 1;
+      TRISA = CONFIG_CPU_TRISA;
+      */
+      
+      // send it away
+      nRFCMD_Macro ((unsigned char *) &g_MacroBeacon);
+      status = (i & 0x7) == 0;
+      
+      if (status)
+	LED1_LIT;
+      nRFCMD_Execute ();
+      if (status)
+	LED1_DIM;
+      
+      i++;
+    }
+  
   // rest in peace
   // when seq counter is exhausted
-  while (1)
-    {
-      sleep_jiffies (95 * TIMER1_JIFFIES_PER_MS);
-      CONFIG_PIN_LED = 1;
-      sleep_jiffies (5 * TIMER1_JIFFIES_PER_MS);
-      CONFIG_PIN_LED = 0;
-    }
+  while (1){
+    sleep_jiffies (95 * TIMER1_JIFFIES_PER_MS);
+    LED1_LIT;
+    sleep_jiffies (5 * TIMER1_JIFFIES_PER_MS);
+    LED1_DIM;
+  }
 }
