@@ -23,11 +23,10 @@
 
 */
 
-//#include <htc.h> //PIC stuff
+#include <htc.h>
 #include "config.h"
 #include "timer.h"
 
-/* Vestigial PIC stuff.
 #define PIE1	0x8c
 #define INTCON	0x0b
 
@@ -46,32 +45,39 @@
 
 #define INTCON_PEIE	(1 << 6)
 #define INTCON_GIE	(1 << 7)
-*/
 
 static char timer1_wrapped;
 
-void timer1_init (void) {
+void
+timer1_init (void)
+{
   /* Configure Timer 1 to use external 32768Hz crystal and 
    * no (1:1) prescaler*/
   T1CON = T1CON_T1OSCEN | T1CON_T1SYNC | T1CON_TMR1CS;
   timer1_wrapped = 0;
 }
 
-void timer1_set (unsigned short tout) {
+void
+timer1_set (unsigned short tout)
+{
   tout = 0xffff - tout;
 
   TMR1H = tout >> 8;
   TMR1L = tout & 0xff;
 }
 
-void timer1_go (void) {
+void
+timer1_go (void)
+{
   TMR1ON = 1;
   TMR1IE = 1;
   PEIE = 1;
   GIE = 1;
 }
 
-void timer1_sleep (void) {
+void
+timer1_sleep (void)
+{
   timer1_wrapped = 0;
   while (timer1_wrapped == 0)
     {
@@ -81,17 +87,23 @@ void timer1_sleep (void) {
     }
 }
 
-void sleep_jiffies (unsigned short jiffies) {
+void
+sleep_jiffies (unsigned short jiffies)
+{
   timer1_set (jiffies);
   timer1_go ();
   timer1_sleep ();
 }
 
-void sleep_2ms (void) {
+void
+sleep_2ms (void)
+{
   sleep_jiffies (2 * TIMER1_JIFFIES_PER_MS);
 }
 
-void interrupt irq (void) {
+void interrupt
+irq (void)
+{
   /* timer1 has overflowed */
   if (TMR1IF){
     timer1_wrapped = 1;
