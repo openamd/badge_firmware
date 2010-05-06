@@ -33,8 +33,8 @@ obj/%.obj: src/%.c src/*.h
 	$(CC) $(CFLAGS) -c $(filter-out %.h,$^) -o $@
 
 $(PROGNAME).hex: $(OBJ_OUT)
-	$(CC) $(LDFLAGS) -Oobj/$@ $^
-
+	$(CC) $(LDFLAGS) -o $@.exe $^
+	msp430-objcopy $@.exe -O ihex $@
 clean:
 	rm -f $(CLEANS)
 
