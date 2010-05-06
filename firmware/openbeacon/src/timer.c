@@ -5,7 +5,7 @@
  *
  * Copyright 2006 Harald Welte <laforge@openbeacon.org>
  *
-/***************************************************************
+ ***************************************************************/
 
 /*
     This program is free software; you can redistribute it and/or modify
@@ -51,34 +51,37 @@
 static char timer1_wrapped;
 
 void timer1_init (void) {
-  /* Configure Timer 1 to use external 32768Hz crystal and 
-   * no (1:1) prescaler*/
-  T1CON = T1CON_T1OSCEN | T1CON_T1SYNC | T1CON_TMR1CS;
+  /* Configure PIC Timer 1 to use external 32768Hz crystal and 
+   * no (1:1) prescaler
+   T1CON = T1CON_T1OSCEN | T1CON_T1SYNC | T1CON_TMR1CS;*/
   timer1_wrapped = 0;
 }
 
 void timer1_set (unsigned short tout) {
   tout = 0xffff - tout;
 
+  /* PIC
   TMR1H = tout >> 8;
   TMR1L = tout & 0xff;
+  */
 }
 
 void timer1_go (void) {
+  /* PIC
   TMR1ON = 1;
   TMR1IE = 1;
   PEIE = 1;
-  GIE = 1;
+  GIE = 1;*/
 }
 
 void timer1_sleep (void) {
   timer1_wrapped = 0;
-  while (timer1_wrapped == 0)
-    {
-      /* enable peripheral interrupts */
-      GIE = PEIE = TMR1IE = 1;
-      SLEEP ();
-    }
+  while (timer1_wrapped == 0){
+    /* enable peripheral interrupts */
+    /* PIC
+       GIE = PEIE = TMR1IE = 1;
+       SLEEP ();*/
+  }
 }
 
 void sleep_jiffies (unsigned short jiffies) {
@@ -91,11 +94,13 @@ void sleep_2ms (void) {
   sleep_jiffies (2 * TIMER1_JIFFIES_PER_MS);
 }
 
+/* PIC
 void interrupt irq (void) {
-  /* timer1 has overflowed */
+  //timer1 has overflowed 
+
   if (TMR1IF){
     timer1_wrapped = 1;
     TMR1ON = 0;
     TMR1IF = 0;
-  }
-}
+    }
+}*/
