@@ -3,6 +3,7 @@
  * OpenBeacon.org - nRF24L01 hardware support / macro functions
  *
  * Copyright 2006 Milosch Meriac <meriac@openbeacon.de>
+ * Ported to MSP430 by Travis Goodspeed <travis@tnbelt.com>
  *
  ***************************************************************/
 

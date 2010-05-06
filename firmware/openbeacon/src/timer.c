@@ -4,6 +4,7 @@
  *                  based on 32.768kHz watch crystal
  *
  * Copyright 2006 Harald Welte <laforge@openbeacon.org>
+ * Ported to MSP430 by Travis Goodspeed <travis@tnbelt.com>
  *
  ***************************************************************/
 
@@ -23,30 +24,13 @@
 
 */
 
-//#include <htc.h> //PIC stuff
+
+unsigned int mclock=0, clock=0, timeout=0x1000;
+
+
 #include "config.h"
 #include "timer.h"
 
-/* Vestigial PIC stuff.
-#define PIE1	0x8c
-#define INTCON	0x0b
-
-#define	T1CON_TMR1ON 	(1 << 0)
-#define	T1CON_TMR1CS	(1 << 1)
-#define T1CON_T1SYNC	(1 << 2)
-#define T1CON_T1OSCEN	(1 << 3)
-#define T1CON_T1CKPS0	(1 << 4)
-#define T1CON_T1CKPS1	(1 << 5)
-#define T1CON_TMR1GE	(1 << 6)
-#define T1CON_T1GINV	(1 << 7)
-
-#define PIR1_TMR1IF	(1 << 0)
-
-#define PIE1_TMR1IE	(1 << 0)
-
-#define INTCON_PEIE	(1 << 6)
-#define INTCON_GIE	(1 << 7)
-*/
 
 static char timer1_wrapped;
 
@@ -54,12 +38,22 @@ void timer1_init (void) {
   /* Configure PIC Timer 1 to use external 32768Hz crystal and 
    * no (1:1) prescaler
    T1CON = T1CON_T1OSCEN | T1CON_T1SYNC | T1CON_TMR1CS;*/
-  timer1_wrapped = 0;
+  
+  clock=mclock=0;
+  
+  WDTCTL = WDTPW + WDTHOLD;             // Stop WDT
+  TACTL = TASSEL1 + TACLR;              // SMCLK, clear TAR
+  
+  CCR0 = 0x400;                         // clock divider of 1024
+  TACTL |= MC_3;
+  timer1_wrapped = 0;  
 }
 
-void timer1_set (unsigned short tout) {
-  tout = 0xffff - tout;
 
+//! Set the timeout value of timer1.
+void timer1_set (unsigned short tout) {
+  clock=mclock=timer1_wrapped=0;
+  timeout=tout;
   /* PIC
   TMR1H = tout >> 8;
   TMR1L = tout & 0xff;
@@ -67,20 +61,19 @@ void timer1_set (unsigned short tout) {
 }
 
 void timer1_go (void) {
-  /* PIC
-  TMR1ON = 1;
-  TMR1IE = 1;
-  PEIE = 1;
-  GIE = 1;*/
+  //MSP430
+  CCTL0 = CCIE;                         // CCR0 interrupt enabled
+  _EINT();                              // Enable interrupts 
 }
 
 void timer1_sleep (void) {
-  timer1_wrapped = 0;
+  mclock = clock = timer1_wrapped= 0;
   while (timer1_wrapped == 0){
     /* enable peripheral interrupts */
     /* PIC
        GIE = PEIE = TMR1IE = 1;
        SLEEP ();*/
+    //TODO Enter an LPM here.
   }
 }
 
@@ -94,13 +87,28 @@ void sleep_2ms (void) {
   sleep_jiffies (2 * TIMER1_JIFFIES_PER_MS);
 }
 
+void usleep(unsigned short i){
+  sleep_jiffies (i * TIMER1_JIFFIES_PER_MS);
+}
+
 /* PIC
 void interrupt irq (void) {
   //timer1 has overflowed 
-
   if (TMR1IF){
     timer1_wrapped = 1;
     TMR1ON = 0;
     TMR1IF = 0;
     }
 }*/
+
+
+// Timer A0 interrupt service routine
+interrupt(TIMERA0_VECTOR) Timer_A (void)
+{
+  if(!clock++)
+    mclock++;
+  if(clock==timeout)
+    timer1_wrapped=1;
+  
+  return;
+}

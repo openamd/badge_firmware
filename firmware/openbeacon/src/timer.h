@@ -3,6 +3,7 @@
  * OpenBeacon.org - definition exported timer function
  *
  * Copyright 2006 Harald Welte <laforge@openbeacon.org>
+ * Ported to MSP430 by Travis Goodspeed <travis@tnbelt.com>
  *
  ***************************************************************/
 
@@ -25,11 +26,14 @@
 #ifndef _TIMER_H
 #define _TIMER_H
 
-#define TIMER1_HZ	32768
-#define TIMER1_JIFFIES_PER_MS 33
+
+//Calculated for TA divisor of 0x400.
+#define TIMER1_HZ	15625
+#define TIMER1_JIFFIES_PER_MS 16
 
 void timer1_init (void);
 void sleep_2ms (void);
 void sleep_jiffies (unsigned short jiffies);
+void usleep(unsigned short i);
 
 #endif /* _TIMER_H */
