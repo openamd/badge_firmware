@@ -1,0 +1,25 @@
+Mext Hope Badge 1.0 Errata
+by Travis Goodspeed
+
+ERRATUM 1.
+
+Pin 80 of U2 is AVcc.  It should not be run to ground.  Lift the pin
+to correct.
+
+ERRATUM 2.
+
+The battery is located too close to the JTAG port.  Fixed in NHB11 by
+moving it further North.
+
+ERRATUM 3.
+
+The programmers shipped to Shanghai with firmware that is not
+compatible with the new MSP430 chips.  New firmware needs to be
+flashed, and a new client needs to be used.
+
+ERRATUM 4.
+
+The TEST pin of the FTDI should be tied to GND.  Leaving it floating
+makes the device non-functional unless you are lucky enough to have a
+solder bridge.
+
