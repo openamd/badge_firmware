@@ -82,12 +82,14 @@
 */
 
 #define PLED P1OUT
-#define LED1_LIT P1OUT&=~BIT1
-#define LED2_LIT P1OUT&=~BIT3
-#define LED3_LIT P1OUT&=~BIT4
-#define LED1_DIM P1OUT|=BIT1
-#define LED2_DIM P1OUT|=BIT3
-#define LED3_DIM P1OUT|=BIT4
+#define PLEDDIR P1DIR
+#define LEDBITS (BIT0+BIT2+BIT3);
+#define LED1_LIT P1OUT&=~BIT0
+#define LED2_LIT P1OUT&=~BIT2
+#define LED3_LIT P1OUT&=~BIT3
+#define LED1_DIM P1OUT|=BIT0
+#define LED2_DIM P1OUT|=BIT2
+#define LED3_DIM P1OUT|=BIT3
 
 
 //Pins and I/O

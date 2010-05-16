@@ -140,27 +140,16 @@ CALDCO_16MHZ 0x96 CALBC1_16MHZ 0x8f   2619-001.txt
 
 //! Initialize the MSP430 clock.
 void msp430_init_dco() {
-    P8SEL = 0; // disable XT2 on P8.7/8
   if(CALBC1_16MHZ!=0xFF){
+    //Clear DCL for BCL12
+    DCOCTL = 0x00;
     //Info is intact, use it.
     BCSCTL1 = CALBC1_16MHZ;
     DCOCTL = CALDCO_16MHZ;
   }else{
     //Info is missing, guess at a good value.
-    switch(*((int*)0xff0)){
-    default:
-    case 0x6ff2:        //f26f, the MSP430F2618
-      DCOCTL = 0x00;
-      #ifndef DCOVAL
-      #define DCOVAL 0x8f
-      #endif
-      BCSCTL1 = DCOVAL;   //CALBC1_16MHZ at 0x10f9
-      /** Observed DCOCTL values:
-	  2618: 7f, 97
-      */
-      DCOCTL = 0x83;    //CALDCO_16MHZ at 0x10f8
-      break;
-    }
+    BCSCTL1 = 0x8f;   //CALBC1_16MHZ at 0x10f9
+    DCOCTL = 0x7f;    //CALDCO_16MHZ at 0x10f8
   }
   
   return;

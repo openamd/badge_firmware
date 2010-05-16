@@ -122,17 +122,29 @@ void msp430_init_dco();
 int main (void){
   u_int8_t i, status;
   u_int16_t crc;
-
-  /* configure CPU peripherals */
-  msp430_init_dco();
-  P1DIR=BIT1+BIT3+BIT4;//LED outputs
+  
+  // Stop WDT
+  WDTCTL = WDTPW + WDTHOLD;
+  
+  //LED setup
+  PLEDDIR=LEDBITS;
+  PLED|=LEDBITS;
+  
   P5DIR=MOSI+SCK+CSN+CE;//Radio outputs
   
+  /* configure CPU peripherals */
+  msp430_init_dco();
+  
+  while(1)
   for (i = 0; i <= 40; i++){
     if(i&1) LED1_LIT;
     else LED1_DIM;
     
-    sleep_jiffies (100 * TIMER1_JIFFIES_PER_MS);
+    
+    msleep(1);
+    //sleep_jiffies (100 * TIMER1_JIFFIES_PER_MS);
+    
+    LED3_LIT;
   }
   
   nRFCMD_Init ();

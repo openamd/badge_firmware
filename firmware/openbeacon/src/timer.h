@@ -34,6 +34,8 @@
 void timer1_init (void);
 void sleep_2ms (void);
 void sleep_jiffies (unsigned short jiffies);
-void usleep(unsigned short i);
+#define usleep msleep
+void msleep(unsigned short i);
+void timer1_go ();
 
 #endif /* _TIMER_H */
