@@ -119,9 +119,8 @@ void store_incremented_codeblock (void) {
 //TODO move this to a separate header.
 void msp430_init_dco();
 
-int main (void){
-  u_int8_t i, status;
-  u_int16_t crc;
+int main (){
+  volatile int i;
   
   // Stop WDT
   WDTCTL = WDTPW + WDTHOLD;
@@ -133,19 +132,24 @@ int main (void){
   P5DIR=MOSI+SCK+CSN+CE;//Radio outputs
   
   /* configure CPU peripherals */
-  msp430_init_dco();
+  //msp430_init_dco();
   
-  while(1)
-  for (i = 0; i <= 40; i++){
-    if(i&1) LED1_LIT;
-    else LED1_DIM;
-    
-    
-    msleep(1);
-    //sleep_jiffies (100 * TIMER1_JIFFIES_PER_MS);
-    
-    LED3_LIT;
+  //Blink a bit at startup.
+  for(i=0;i<10;i++){
+    P1OUT^=1;
+    msleep(10);
   }
+  LED1_DIM;
+  
+  //Start broadcasting.
+  openbeacon();
+}
+
+//! Entry point to the openbeacon app.
+int openbeacon(){
+  u_int8_t i, status;
+  u_int16_t crc;
+  
   
   nRFCMD_Init ();
 
@@ -220,8 +224,8 @@ int main (void){
   // when seq counter is exhausted
   while (1){
     sleep_jiffies (95 * TIMER1_JIFFIES_PER_MS);
-    LED1_LIT;
+    LED3_LIT;
     sleep_jiffies (5 * TIMER1_JIFFIES_PER_MS);
-    LED1_DIM;
+    LED3_DIM;
   }
 }

@@ -32,7 +32,7 @@ void timer1_go () {
   WDTCTL = WDTPW + WDTHOLD;             // Stop WDT
   TACTL = TASSEL1 + TACLR;              // SMCLK, clear TAR
   CCTL0 = CCIE;                         // CCR0 interrupt enabled
-  CCR0 = 0x200; //clock divider
+  CCR0 = 0x800; //clock divider
   TACTL |= MC_3;
   _EINT();                              // Enable interrupts 
   
@@ -43,23 +43,30 @@ void timer1_go () {
 }
 
 void timer1_sleep () {
-  mclock = clock = timer1_wrapped= 0;
+  //mclock = clock = timer1_wrapped= 0;
   
 
-  while (clock<50){
+  while (clock<timeout){
     //TODO Enter an LPM here.
-
+    
   }
-  LED2_LIT;
-  while(1);
   
   timer1_wrapped=0;
   
 }
 
 void sleep_jiffies (unsigned short jiffies) {
-  timer1_set (jiffies);
-  timer1_sleep ();
+  
+  /*
+    timer1_set (jiffies);
+    timer1_sleep ();
+  */
+  
+  volatile int i=jiffies, j=1000;
+  while(j--){
+    i=jiffies;
+    while(i--);
+  }
 }
 
 void sleep_2ms (void) {
@@ -75,12 +82,15 @@ void msleep(unsigned short i){
 interrupt(TIMERA0_VECTOR) Timer_A (void){
   LED1_LIT;
   
-  if(!clock++)
-    mclock++;
-  if(clock>timeout)
-    timer1_wrapped=1;
+  clock++;
   
-  if(clock<5)
-    LED1_DIM;
+  if(!clock)
+    mclock++;
+  if(clock>timeout){
+    timer1_wrapped++;
+    LED3_LIT;
+  }
+  //if(clock<50)
+  LED1_DIM;
   return;
 }
