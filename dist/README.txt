@@ -4,8 +4,7 @@ README
 
 Hold the Windows button down and press the "R" key
 Type "cmd" and press ENTER
-type "cd Desktop" and press ENTER
-Type "cd HOPE_Badge" and press ENTER
+type "cd dist" and press ENTER
 
 THEN ...
 
@@ -16,21 +15,21 @@ TO SCAN FOR PROGRAMMER
 Type "scan.bat" and press ENTER.
 
 NOTE: LOOK FOR COMPORT NUMBER ASSOCIATED WITH "FTDI" DRIVER.  In the examples
-below, this is 6.  Use your number instead of 6.
+below, this is 6.  Use YOUR NUMBER instead of 6.
 
 
 =======================
 TO FLASH THE PROGRAMMER
 =======================
 
-Type "flashProgrammer.bat 6" and press enter.  This will load the latest
+Type "flashProgrammer.bat COM6" and press ENTER.  This will load the latest
 programmer firmware, which is necessary to program the badge.
 
 ====================
 BADGE BLINK TEST
 ====================
 
-Type "flashBlink.bat 6" and press ENTER.  This will blink LED1 and do
+Type "flashBlink.bat COM6" and press ENTER.  This will blink LED1 and do
 nothing else.  This is only to verify that the programmer is properly
 wired.
 
@@ -39,7 +38,7 @@ wired.
 BADGE RADIO TEST
 ==================
 
-Type "flashBadge.bat 6" and press ENTER.  This will update the badge
+Type "flashBadge.bat COM6" and press ENTER.  This will update the badge
 firmware.  LED1 will blink each time a packet is sent over the radio.
 At the same time, a radio chirp should be seen in the 2.4GHz band.
 
