@@ -23,14 +23,14 @@ below, this is 6.  Use your number instead of 6.
 TO FLASH THE PROGRAMMER
 =======================
 
-Type "flashProgrammer.bat" and press enter.  This will load the latest
+Type "flashProgrammer.bat 6" and press enter.  This will load the latest
 programmer firmware, which is necessary to program the badge.
 
 ====================
 BADGE BLINK TEST
 ====================
 
-Type "flashBlink.bat" and press ENTER.  This will blink LED1 and do
+Type "flashBlink.bat 6" and press ENTER.  This will blink LED1 and do
 nothing else.  This is only to verify that the programmer is properly
 wired.
 
