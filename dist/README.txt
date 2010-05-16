@@ -26,18 +26,19 @@ TO FLASH THE PROGRAMMER
 Type "flashProgrammer.bat" and press enter.  This will load the latest
 programmer firmware, which is necessary to program the badge.
 
-
-==================
-TO FLASH THE BADGE
-==================
-
-Type "flashBadge.bat 6" and press ENTER.  This will update the badge
-firmware.  LED1 will blink each time a packet is sent over the radio.
-
 ====================
-BLINK TEST
+BADGE BLINK TEST
 ====================
 
 Type "flashBlink.bat" and press ENTER.  This will blink LED1 and do
 nothing else.  This is only to verify that the programmer is properly
 wired.
+
+
+==================
+BADGE RADIO TEST
+==================
+
+Type "flashBadge.bat 6" and press ENTER.  This will update the badge
+firmware.  LED1 will blink each time a packet is sent over the radio.
+

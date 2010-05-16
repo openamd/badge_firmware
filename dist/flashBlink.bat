@@ -1,8 +1,10 @@
-cd dist
+
 set GOODFET=%1
 echo Using Port %GOODFET%
-goodfet.exe erase
-goodfet.exe flash blink.hex
-goodfet.exe verify blink.hex
-goodfet.exe run
+
+msp430\goodfet.exe info
+msp430\goodfet.exe erase
+msp430\goodfet.exe flash blink.hex
+msp430\goodfet.exe verify blink.hex
+msp430\goodfet.exe run
 
