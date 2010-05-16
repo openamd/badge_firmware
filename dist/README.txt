@@ -41,4 +41,5 @@ BADGE RADIO TEST
 
 Type "flashBadge.bat 6" and press ENTER.  This will update the badge
 firmware.  LED1 will blink each time a packet is sent over the radio.
+At the same time, a radio chirp should be seen in the 2.4GHz band.
 
