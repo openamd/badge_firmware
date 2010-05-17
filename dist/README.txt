@@ -17,6 +17,17 @@ type "cd dist" and press ENTER
 THEN ...
 
 ======================
+Drivers
+======================
+
+Install vcredist_x86.exe if the "Cannot execute program." error
+message is seen.  Drivers for the FTDI chip in the GoodFET programmer
+can be found in CDM*.ZIP.
+
+All of these files are in the Drivers folder.
+
+
+======================
 TO SCAN FOR PROGRAMMER
 ======================
 
