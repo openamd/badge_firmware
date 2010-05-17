@@ -1,6 +1,14 @@
-======
+==========================================================
 README
-======
+
+This README was built for manufacturing, if you intend to
+develop or are looking for Windows version of the GoodFET
+clients please navigate directly to \msp430, \bsl, or
+\scanwin32
+
+-q@theqlabs.com
+
+==========================================================
 
 Hold the Windows button down and press the "R" key
 Type "cmd" and press ENTER
