@@ -33,6 +33,7 @@
 #include "nRF_CMD.h"
 #include "nRF_HW.h"
 #include "main.h"
+#include "led.h"
 
 //Missing macros.
 //__CONFIG (0x03d4);
@@ -130,16 +131,12 @@ int main (){
   PLED|=LEDBITS;
   
   P5DIR=MOSI+SCK+CSN+CE;//Radio outputs
+  P5OUT=CSN; //chip unselected, radio off.
   
   /* configure CPU peripherals */
   //msp430_init_dco();
   
-  //Blink a bit at startup.
-  for(i=0;i<10;i++){
-    P1OUT^=1;
-    msleep(10);
-  }
-  LED1_DIM;
+  led_startup();
   
   //Start broadcasting.
   openbeacon();
