@@ -9,19 +9,21 @@
 void led_startup(){
   volatile register i;
   
-  //Cycle three LEDs.
-  LED1_LIT;
-  msleep(10);
-  LED2_LIT;
-  msleep(10);
-  LED3_LIT;
-  msleep(10);
-  LED1_DIM;
-  msleep(10);
-  LED2_DIM;
-  msleep(10);
-  LED3_DIM;
-  msleep(10);
+  for(i=0;i<5;i++){
+    //Cycle three LEDs.
+    LED1_LIT;
+    msleep(10);
+    LED2_LIT;
+    msleep(10);
+    LED3_LIT;
+    msleep(10);
+    LED1_DIM;
+    msleep(10);
+    LED2_DIM;
+    msleep(10);
+    LED3_DIM;
+    msleep(10);
+  }
   
   //Dim everything for low power mode.
   LED1_DIM;

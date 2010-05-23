@@ -62,7 +62,7 @@ void sleep_jiffies (unsigned short jiffies) {
     timer1_sleep ();
   */
   
-  volatile int i=jiffies, j=1000;
+  volatile int i=jiffies, j=100;
   while(j--){
     i=jiffies;
     while(i--);
