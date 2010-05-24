@@ -35,7 +35,7 @@
 
 
 //TEA is off for now.
-#define CONFIG_TEA_ENABLEENCODE
+//#define CONFIG_TEA_ENABLEENCODE
 //#define CONFIG_TEA_ENABLEDECODE
 
 /***************************************************************

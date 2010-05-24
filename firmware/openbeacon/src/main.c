@@ -146,12 +146,13 @@ int main (){
   /* configure CPU peripherals */
   //msp430_init_dco();
   
-  nRFCMD_Init ();
+  
   
   do{
     LED1_LIT;
     LED2_LIT;
     LED3_LIT;
+    nRFCMD_Init ();
   }while(!nrf_ready());
   led_startup();
   
@@ -205,9 +206,11 @@ int openbeacon(){
 	store_incremented_codeblock ();
       
       // encrypt my data
+      #ifdef CONFIG_TEA_ENABLEENCODE
       shuffle_tx_byteorder ();
       xxtea_encode ();
       shuffle_tx_byteorder ();
+      #endif
       
       /*
       // reset touch sensor pin
@@ -223,11 +226,22 @@ int openbeacon(){
       nRFCMD_Macro ((unsigned char *) &g_MacroBeacon);
       status = (i & 0x7) == 0;
       
+      LED1_LIT;
+      
       if (status)
 	LED2_LIT;
       nRFCMD_Execute ();
       if (status)
 	LED2_DIM;
+      
+      LED1_DIM;
+      do{
+	nRFCMD_Init ();
+	LED3_LIT;
+      }while(!nrf_ready());
+      LED3_DIM;
+      
+      nRFCMD_Init ();
       
       i++;
     }
