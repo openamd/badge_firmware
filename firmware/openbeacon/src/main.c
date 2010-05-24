@@ -120,6 +120,16 @@ void store_incremented_codeblock (void) {
 //TODO move this to a separate header.
 void msp430_init_dco();
 
+//! Returns 1 if NRF is connected.
+int nrf_ready(){
+  char channel=81;
+  nRFCMD_RegWrite(5,&channel,1);
+  channel=12;
+  nRFCMD_RegRead(5,&channel,1);
+  
+  return channel==81;
+}
+
 int main (){
   volatile int i;
   
@@ -136,7 +146,11 @@ int main (){
   /* configure CPU peripherals */
   //msp430_init_dco();
   
-  led_startup();
+  nRFCMD_Init ();
+  
+  do
+    led_startup();
+  while(!nrf_ready());
   
   //Start broadcasting.
   openbeacon();
@@ -149,10 +163,8 @@ int openbeacon(){
   
   
   nRFCMD_Init ();
-
-  //PIC thing, not sure what this did.
-  //IOCA = IOCA | (1 << 0); 
-
+  
+  
   // increment code block after power cycle
   ((unsigned char *) &code_block)[0] = EEPROM_READ (0);
   ((unsigned char *) &code_block)[1] = EEPROM_READ (1);
