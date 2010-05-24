@@ -148,9 +148,12 @@ int main (){
   
   nRFCMD_Init ();
   
-  do
-    led_startup();
-  while(!nrf_ready());
+  do{
+    LED1_LIT;
+    LED2_LIT;
+    LED3_LIT;
+  }while(!nrf_ready());
+  led_startup();
   
   //Start broadcasting.
   openbeacon();
@@ -221,10 +224,10 @@ int openbeacon(){
       status = (i & 0x7) == 0;
       
       if (status)
-	LED1_LIT;
+	LED2_LIT;
       nRFCMD_Execute ();
       if (status)
-	LED1_DIM;
+	LED2_DIM;
       
       i++;
     }
