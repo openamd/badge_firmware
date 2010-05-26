@@ -23,9 +23,9 @@
 #
 
 import sys, string, time
-from twisted.application import internet, service
-from twisted.internet import protocol
-from twisted.python import log
+#from twisted.application import internet, service
+#from twisted.internet import protocol
+#from twisted.python import log
 import struct
 from socket import inet_aton, inet_ntoa
 
@@ -33,8 +33,8 @@ from socket import inet_aton, inet_ntoa
 UDP_PORT = 2342
 
 # decrypt flag
-OPENBEACON_DECODE = 1
-OPENBEACON_DECODE_PUREPYTHON = 0
+OPENBEACON_DECODE = 0
+OPENBEACON_DECODE_PUREPYTHON = 1
 
 # OpenBeacon protocols
 PROTO_BEACONTRACKER = 23
@@ -67,13 +67,55 @@ class OpenBeaconSystem:
         # do your stuff
         print s
 
-class Receiver(protocol.DatagramProtocol):
+from goodfet.GoodFETNRF import GoodFETNRF;
+
+class Receiver(GoodFETNRF): #protocol.DatagramProtocol):
     def __init__(self, process_sighting):
         self.process_sighting = process_sighting
+        self.serInit();
+        self.NRFsetup();
+        self.setupOB();
+    
+    def setupOB(self):
+        #Reversal of transmitter code from nRF_CMD.c of OpenBeacon
+        #TODO remove all poke() calls.
+        
+        self.poke(0x00,0x00); #Stop nRF
+        self.poke(0x01,0x00); #Disable Shockburst
+        self.poke(0x02,0x01); #Set RX Pipe 0
+        self.RF_setmaclen(5); # SETUP_AW for 5-byte addresses.
+        self.RF_setfreq(2481 * 10**6);
+        self.poke(0x06,0x09); #2MBps, -18dBm in RF_SETUP
+        self.poke(0x07,0x78); #Reset status register
+        
+        #OpenBeacon defines these in little endian as follows.
+        #0x01, 0x02, 0x03, 0x02, 0x01
+        self.RF_setsmac(0x0102030201);
+        #'O', 'C', 'A', 'E', 'B'
+        self.RF_settmac(0x424541434F);
+
+        #Set packet length of 16.
+        self.RF_setpacketlen(16);
+        
+        #Power radio, prime for RX, checksum.
+        self.poke(0x00,0x70|0x03|0x08);
+        
+        print "Listening as %010x on %i MHz" % (self.RF_getsmac(),
+                                                self.RF_getfreq()/10**6);
+        #Now we're ready to get packets.
+        
+        while 1:
+            packet=None;
+            while packet==None:
+                #time.sleep(0.1);
+                packet=self.RF_rxpacket();
+                self.datagramReceived(packet,(0x1,0xdead));
+                sys.stdout.flush();
+
 
     def datagramReceived(self, data, (ip, port)):
         tstamp = int(time.time())
-        station_id = struct.unpack('>L', inet_aton(ip))[0]
+        station_id = 0; #struct.unpack('>L', inet_aton(ip))[0]
 
         if OPENBEACON_DECODE:
             data = xxtea.decode(data)
@@ -110,11 +152,14 @@ apply(xxtea.set_key, TEA_CRYPTO_KEY)
 
 OBS = OpenBeaconSystem()
 
-application = service.Application('OpenBeacon On-Line Post-Processing System')
+#application = service.Application('OpenBeacon On-Line Post-Processing System')
 
-receiver = Receiver(OBS.process_sighting)
-udpServer = internet.UDPServer(UDP_PORT, receiver)
-udpServer.setServiceParent(application)
-log.msg('Asynchronous OpenBeacon aggregator server listening on UDP port %d' % UDP_PORT)
+#receiver = Receiver(OBS.process_sighting)
+#udpServer = internet.UDPServer(UDP_PORT, receiver)
+#udpServer.setServiceParent(application)
+#log.msg('Asynchronous OpenBeacon aggregator server listening on UDP port %d' % UDP_PORT)
+
+
+receiver=Receiver(Sighting);
 
 
