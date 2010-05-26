@@ -226,8 +226,12 @@ int openbeacon(){
       P3OUT=0xFF;
       P3DIR=0xFF;
       LED3_DIM;
-      //msleep(2 + (rand()%10));// (rand () % (400 * TIMER1_JIFFIES_PER_MS)));
-      msleep(10 + (rand()%80));
+      
+      //Sleep for a bit while I/O is outbound.
+      //msleep(50); //works, twice or so per second.
+      msleep(10+(rand()&0x2F)); //Bitmasking works, modulus doesn't.  Sign extension?
+      
+      
       LED3_LIT;
       P3DIR=0;
       //The flag field will be set to P3IN, but not here.

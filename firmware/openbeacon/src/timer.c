@@ -74,6 +74,9 @@ void sleep_2ms (void) {
 }
 
 void msleep(unsigned long i){
+  if(i>0x8000)
+    while(1)
+      LED1_LIT;
   sleep_jiffies (i * TIMER1_JIFFIES_PER_MS);
 }
 
