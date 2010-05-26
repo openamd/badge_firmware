@@ -7,7 +7,7 @@
 #include "config.h"
 
 void led_startup(){
-  volatile register i;
+  int i;
   
   for(i=0;i<5;i++){
     //Cycle three LEDs.

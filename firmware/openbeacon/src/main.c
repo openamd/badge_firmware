@@ -130,9 +130,9 @@ int nrf_ready(){
   return channel==81;
 }
 
+int openbeacon();
+
 int main (){
-  volatile int i;
-  
   // Stop WDT
   WDTCTL = WDTPW + WDTHOLD;
   
@@ -158,12 +158,14 @@ int main (){
   
   //Start broadcasting.
   openbeacon();
+
+  return 0;
 }
 
 //! Entry point to the openbeacon app.
 int openbeacon(){
   u_int8_t i, status;
-  u_int16_t crc;
+  u_int16_t crc=0;
   
   
   nRFCMD_Init ();
@@ -223,10 +225,10 @@ int openbeacon(){
       //Reset touch sensor.
       P3OUT=0xFF;
       P3DIR=0xFF;
-      LED3_LIT;
-      //msleep(2 + (rand()%10));// (rand () % (400 * TIMER1_JIFFIES_PER_MS)));
-      msleep(10 + (rand()%20));
       LED3_DIM;
+      //msleep(2 + (rand()%10));// (rand () % (400 * TIMER1_JIFFIES_PER_MS)));
+      msleep(10 + (rand()%80));
+      LED3_LIT;
       P3DIR=0;
       //The flag field will be set to P3IN, but not here.
       //Capacitance will change to show 

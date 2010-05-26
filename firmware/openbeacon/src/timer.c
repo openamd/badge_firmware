@@ -55,14 +55,14 @@ void timer1_sleep () {
   
 }
 
-void sleep_jiffies (unsigned short jiffies) {
+void sleep_jiffies (unsigned long jiffies) {
   
   /*
     timer1_set (jiffies);
     timer1_sleep ();
   */
   
-  volatile int i=jiffies+2, j=10;
+  volatile long i=jiffies+2, j=10;
   while(j--){
     i=jiffies;
     while(i--);
@@ -73,7 +73,7 @@ void sleep_2ms (void) {
   sleep_jiffies (2 * TIMER1_JIFFIES_PER_MS);
 }
 
-void msleep(unsigned short i){
+void msleep(unsigned long i){
   sleep_jiffies (i * TIMER1_JIFFIES_PER_MS);
 }
 
