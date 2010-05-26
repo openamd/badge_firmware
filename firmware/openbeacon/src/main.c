@@ -186,6 +186,7 @@ int openbeacon(){
     while (1){
       g_MacroBeacon.rf_setup = NRF_RFOPTIONS | ((i & 3) << 1);
       g_MacroBeacon.env.pkt.hdr.size = sizeof (TBeaconTracker);
+      
       g_MacroBeacon.env.pkt.hdr.proto = RFBPROTO_BEACONTRACKER;
       // TODO g_MacroBeacon.env.pkt.flags = CONFIG_PIN_SENSOR ? 0 : RFBFLAGS_SENSOR;
       g_MacroBeacon.env.pkt.strength = 0x55 * (i & 0x3);
@@ -196,6 +197,11 @@ int openbeacon(){
 		   sizeof (g_MacroBeacon.env.pkt) -
 		   sizeof (g_MacroBeacon.env.pkt.crc));
       g_MacroBeacon.env.pkt.crc = htons (crc);
+      
+      /*
+      g_MacroBeacon.env.pkt.hdr.size = ((char*) &g_MacroBeacon.env.pkt)[-1];
+      ((char*) &g_MacroBeacon.env.pkt)[-1]=0xde;
+      */
       
       // update code_block so on next power up
       // the seq will be higher or equal
@@ -230,13 +236,13 @@ int openbeacon(){
       
       if (status)
 	LED2_LIT;
-      nRFCMD_Execute ();
+      nRFCMD_Execute (); //Transmit packet held in TX Buffer
       if (status)
 	LED2_DIM;
       
       LED1_DIM;
       do{
-	nRFCMD_Init ();
+	nRFCMD_Init ();  //Reset radio.
 	LED3_LIT;
       }while(!nrf_ready());
       LED3_DIM;

@@ -22,17 +22,18 @@
 
 */
 
+
 #ifndef __OPENBEACON_MAIN_H__
 #define __OPENBEACON_MAIN_H__
 
 #include "openbeacon.h"
 
-typedef struct{
+ typedef struct{
   u_int8_t size1, opcode1, rf_setup;
   u_int8_t size2, opcode2;
   TBeaconEnvelope env;
   u_int8_t eot;
-} TMacroBeacon;
+} __attribute__((packed)) TMacroBeacon;
 
 extern TMacroBeacon g_MacroBeacon;
 

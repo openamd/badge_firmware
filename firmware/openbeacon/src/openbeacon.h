@@ -52,6 +52,19 @@ typedef unsigned short u_int16_t;
 typedef unsigned long u_int32_t;
 */
 
+
+/*
+ 
+ SZ PR FL ST SEQUENCENUM SOURCEIDXXX RESVD CRC16
+ 10 17 00 ff 00 0a 6f a7 ff ff ff ff 00 00 e7 53
+ 10 17 00 ff 00 0a 6f ab ff ff ff ff 00 00 b5 38
+ 10 17 00 aa 00 0a 6f ae ff ff ff ff 00 00 54 79
+ 10 17 00 ff 00 0a 6f b3 ff ff ff ff 00 00 11 ee
+ 10 17 00 ff 00 0a 6f b7 ff ff ff ff 00 00 d0 28
+ 10 17 00 aa 00 0a 6f ba ff ff ff ff 00 00 a2 c4
+
+*/
+
 typedef struct{
   u_int8_t size, proto;
 } TBeaconHeader;
