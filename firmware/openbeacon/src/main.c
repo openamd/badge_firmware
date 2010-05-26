@@ -189,6 +189,7 @@ int openbeacon(){
       
       g_MacroBeacon.env.pkt.hdr.proto = RFBPROTO_BEACONTRACKER;
       // TODO g_MacroBeacon.env.pkt.flags = CONFIG_PIN_SENSOR ? 0 : RFBFLAGS_SENSOR;
+      g_MacroBeacon.env.pkt.flags = P3IN;
       g_MacroBeacon.env.pkt.strength = 0x55 * (i & 0x3);
       g_MacroBeacon.env.pkt.seq = htonl (seq++);
       g_MacroBeacon.env.pkt.oid = htonl (oid);
@@ -218,15 +219,17 @@ int openbeacon(){
       shuffle_tx_byteorder ();
       #endif
       
-      /*
-      // reset touch sensor pin
-      //TODO 
-      TRISA = CONFIG_CPU_TRISA & ~0x02;
-      CONFIG_PIN_SENSOR = 0;
-      sleep_jiffies (10 + (rand () % (400 * TIMER1_JIFFIES_PER_MS)));
-      CONFIG_PIN_SENSOR = 1;
-      TRISA = CONFIG_CPU_TRISA;
-      */
+      
+      //Reset touch sensor.
+      P3OUT=0xFF;
+      P3DIR=0xFF;
+      LED3_LIT;
+      //msleep(2 + (rand()%10));// (rand () % (400 * TIMER1_JIFFIES_PER_MS)));
+      msleep(10 + (rand()%20));
+      LED3_DIM;
+      P3DIR=0;
+      //The flag field will be set to P3IN, but not here.
+      //Capacitance will change to show 
       
       // send it away
       nRFCMD_Macro ((unsigned char *) &g_MacroBeacon);
@@ -240,12 +243,10 @@ int openbeacon(){
       if (status)
 	LED2_DIM;
       
-      LED1_DIM;
       do{
 	nRFCMD_Init ();  //Reset radio.
-	LED3_LIT;
       }while(!nrf_ready());
-      LED3_DIM;
+      LED1_DIM;
       
       nRFCMD_Init ();
       
@@ -254,6 +255,8 @@ int openbeacon(){
   
   // rest in peace
   // when seq counter is exhausted
+  LED1_DIM;
+  LED2_DIM; 
   while (1){
     sleep_jiffies (95 * TIMER1_JIFFIES_PER_MS);
     LED3_LIT;
