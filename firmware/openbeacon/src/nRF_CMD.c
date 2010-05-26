@@ -32,6 +32,7 @@
 
 //#assert NRF_MAC_SIZE==5
 
+//|NRF_CONFIG_CRCO, fixes alignment but breaks receiver
 #define NRF_CONFIG_BYTE (NRF_CONFIG_EN_CRC)
 
 // first byte payload size+1, second byte register, 3..n-th byte payload
