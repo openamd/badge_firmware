@@ -1,1 +1,3 @@
-goodfet\gfbsl.exe -e -p goodfet.hex
+goodfet\gfbsl.exe -e
+sleep 2
+goodfet\gfbsl.exe -p goodfet.hex
