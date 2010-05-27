@@ -58,7 +58,12 @@ BADGE RADIO TEST
 ==================
 
 Type "flashBadge.bat" and press ENTER.  This will update the badge
-firmware.  LED1 and LED3 will blink each time a packet is sent over
-the radio.  At the same time, a radio chirp should be seen on 2.481
-GHz.
+firmware.  You will be asked for a serial number, which should be
+between 5,000 and 7,000.
+
+LED1 will blink each time a packet is sent over the radio.  At the
+same time, a radio chirp should be seen on 2.481 GHz.  You will also
+notice all three leds responding to finger presses on the 8-pin GPIO
+header.
+
 
