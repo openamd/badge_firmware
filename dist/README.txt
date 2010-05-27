@@ -1,10 +1,9 @@
 ==========================================================
 README
 
-This README was built for manufacturing, if you intend to
-develop or are looking for Windows version of the GoodFET
-clients please navigate directly to \msp430, \bsl, or
-\scanwin32
+This README was built for manufacturing, not for development.  The
+following instructions explain how to program the badge from a Windows
+workstation with a single GoodFET programmer attached.
 
 -q@theqlabs.com
 
@@ -33,31 +32,33 @@ TO SCAN FOR PROGRAMMER
 
 Type "scan.bat" and press ENTER.
 
-NOTE: LOOK FOR COMPORT NUMBER ASSOCIATED WITH "FTDI" DRIVER.  In the examples
-below, this is 6.  Use YOUR NUMBER instead of 6.
+NOTE: Scanning is now automatically handled in the other commands.  Just
+make sure that one COM port is listed, such as
+
+COM6: (FTDIBUS\COMPORT&VID_0403&PID_6001) Ready
 
 
 =======================
 TO FLASH THE PROGRAMMER
 =======================
 
-Type "flashProgrammer.bat COM6" and press ENTER.  This will load the latest
+Type "flashProgrammer.bat" and press ENTER.  This will load the latest
 programmer firmware, which is necessary to program the badge.
 
 ====================
 BADGE BLINK TEST
 ====================
 
-Type "flashBlink.bat COM6" and press ENTER.  This will blink LED1 and do
+Type "flashBlink.bat" and press ENTER.  This will blink LED1 and do
 nothing else.  This is only to verify that the programmer is properly
 wired.
-
 
 ==================
 BADGE RADIO TEST
 ==================
 
-Type "flashBadge.bat COM6" and press ENTER.  This will update the badge
-firmware.  LED1 will blink each time a packet is sent over the radio.
-At the same time, a radio chirp should be seen in the 2.4GHz band.
+Type "flashBadge.bat" and press ENTER.  This will update the badge
+firmware.  LED1 and LED3 will blink each time a packet is sent over
+the radio.  At the same time, a radio chirp should be seen on 2.481
+GHz.
 
