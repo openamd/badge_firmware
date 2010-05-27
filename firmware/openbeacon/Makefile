@@ -28,7 +28,8 @@ LDFLAGS=$(COMMON_FLAGS)
 #export LC_ALL=C
 
 all: $(PROGNAME).hex
-
+dist: openbeacontag.hex
+	cp openbeacontag.hex ../../dist/openbeacontag.hex
 obj/%.obj: src/%.c src/*.h
 	$(CC) $(CFLAGS) -c $(filter-out %.h,$^) -o $@
 
