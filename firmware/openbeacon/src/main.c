@@ -196,7 +196,7 @@ int openbeacon(){
       g_MacroBeacon.env.pkt.strength = 0x55 * (i & 0x3);
       g_MacroBeacon.env.pkt.seq = htonl (seq++);
       g_MacroBeacon.env.pkt.oid = htonl (oid);
-      g_MacroBeacon.env.pkt.reserved = 0;
+      g_MacroBeacon.env.pkt.reserved = CALBC1_16MHZ|(CALDCO_16MHZ<<8);
       crc = crc16 (g_MacroBeacon.env.datab,
 		   sizeof (g_MacroBeacon.env.pkt) -
 		   sizeof (g_MacroBeacon.env.pkt.crc));
