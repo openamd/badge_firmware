@@ -39,7 +39,7 @@
 //__CONFIG (0x03d4);
 //__EEPROM_DATA (0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 ,0x00);
 
-volatile const u_int32_t oid = 0xFFFFFFFF, seed = 0xFFFFFFFF;
+volatile /* const */ u_int32_t oid = 0xFFFFFFFF, seed = 0xFFFFFFFF;
 u_int32_t seq = 0;
 static u_int16_t code_block;
 
@@ -143,10 +143,11 @@ int main (){
   P5DIR=MOSI+SCK+CSN+CE;//Radio outputs
   P5OUT=CSN; //chip unselected, radio off.
   
-  /* configure CPU peripherals */
-  //msp430_init_dco();
+  /* configure CPU peripherals for high-speed operation. */
+  //msp430_init_dco();  //Not needed, just wastes power.
   
-  
+  //Load OID from Info Flash
+  oid=((long*) 0xFFB0)[0];
   
   do{
     LED1_LIT;
@@ -222,17 +223,28 @@ int openbeacon(){
       #endif
       
       
+      // Indicate touch sensor.  This must be done before P3 refresh below.
+      LED1_DIM;
+      LED2_DIM;
+      LED3_DIM;
+      
+      // Multitouch!
+      if((P3IN^0xFF)&0xC0)
+	LED3_LIT;
+      if((P3IN^0xFF)&0x18)
+	LED2_LIT;
+      if((P3IN^0xFF)&0x03)
+	LED1_LIT;
+      
       //Reset touch sensor.
       P3OUT=0xFF;
       P3DIR=0xFF;
-      LED3_DIM;
       
       //Sleep for a bit while I/O is outbound.
       //msleep(50); //works, twice or so per second.
       msleep(10+(rand()&0x2F)); //Bitmasking works, modulus doesn't.  Sign extension?
       
       
-      LED3_LIT;
       P3DIR=0;
       //The flag field will be set to P3IN, but not here.
       //Capacitance will change to show 
@@ -241,18 +253,15 @@ int openbeacon(){
       nRFCMD_Macro ((unsigned char *) &g_MacroBeacon);
       status = (i & 0x7) == 0;
       
-      LED1_LIT;
-      
-      if (status)
-	LED2_LIT;
+
+      if(status)
+	LED1_LIT;
       nRFCMD_Execute (); //Transmit packet held in TX Buffer
-      if (status)
-	LED2_DIM;
-      
-      do{
+
+      while(!nrf_ready()){
 	nRFCMD_Init ();  //Reset radio.
-      }while(!nrf_ready());
-      LED1_DIM;
+	LED3_LIT;
+      }
       
       nRFCMD_Init ();
       
@@ -263,6 +272,7 @@ int openbeacon(){
   // when seq counter is exhausted
   LED1_DIM;
   LED2_DIM; 
+  LED3_DIM;
   while (1){
     sleep_jiffies (95 * TIMER1_JIFFIES_PER_MS);
     LED3_LIT;

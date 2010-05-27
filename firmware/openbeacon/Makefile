@@ -40,9 +40,11 @@ clean:
 	rm -f $(CLEANS)
 
 install: $(PROGNAME).hex
-	goodfet.msp430 erase
+	goodfet.msp430 eraseinfo
 	goodfet.msp430 flash $(PROGNAME).hex
 	goodfet.msp430 verify $(PROGNAME).hex
+	goodfet.msp430 poke 0xFFB0 0xdead
+	goodfet.msp430 poke 0xFFB2 0xbeef
 	goodfet.msp430 run
 bsl: $(PROGNAME).hex
 	goodfet.bsl -e -p $(PROGNAME).hex
