@@ -1,1 +1,2 @@
-scanwin32\scanwin32.exe
+goodfet\goodfet.exe scan
+
