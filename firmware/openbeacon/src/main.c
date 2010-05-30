@@ -228,13 +228,24 @@ int openbeacon(){
       LED2_DIM;
       LED3_DIM;
       
-      // Multitouch!
+      // Multitouch! (strong)
+      /*
       if((P3IN^0xFF)&0xC0)
 	LED3_LIT;
       if((P3IN^0xFF)&0x18)
 	LED2_LIT;
       if((P3IN^0xFF)&0x03)
 	LED1_LIT;
+      */
+      
+      // Multitouch! (strong)
+      if((P3IN^0xFF)&0x80)
+	LED3_LIT;
+      if((P3IN^0xFF)&0x18)
+	LED2_LIT;
+      if((P3IN^0xFF)&0x01)
+	LED1_LIT;
+      
       
       //Reset touch sensor.
       P3OUT=0xFF;

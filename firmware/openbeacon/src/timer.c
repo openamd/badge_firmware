@@ -39,20 +39,15 @@ void timer1_go () {
   //MSP430
   CCTL0 |= CCIE;                         // CCR0 interrupt enabled
   _EINT();                              // Enable interrupts 
-  
 }
 
 void timer1_sleep () {
   //mclock = clock = timer1_wrapped= 0;
-  
-
+  __bis_SR_register(CPUOFF + GIE);
   while (clock<timeout){
     //TODO Enter an LPM here.
-    
   }
-  
   timer1_wrapped=0;
-  
 }
 
 void sleep_jiffies (unsigned long jiffies) {
@@ -92,6 +87,7 @@ interrupt(TIMERA0_VECTOR) Timer_A (void){
   if(clock>timeout){
     timer1_wrapped++;
     LED3_LIT;
+    __bic_SR_register_on_exit(CPUOFF);
   }
   //if(clock<50)
   LED1_DIM;
