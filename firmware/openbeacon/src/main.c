@@ -253,7 +253,7 @@ int openbeacon(){
       
       //Sleep for a bit while I/O is outbound.
       //msleep(50); //works, twice or so per second.
-      msleep(10+(rand()&0x2F)); //Bitmasking works, modulus doesn't.  Sign extension?
+      msleep(5+(rand()&0x1F)); //Bitmasking works, modulus doesn't.  Sign extension?
       
       
       P3DIR=0;
