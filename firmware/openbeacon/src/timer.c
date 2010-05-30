@@ -52,16 +52,16 @@ void timer1_sleep () {
 
 void sleep_jiffies (unsigned long jiffies) {
   
-  /*
-    timer1_set (jiffies);
-    timer1_sleep ();
-  */
+  timer1_set (jiffies);
+  timer1_sleep ();
   
+  /* Software Code
   volatile long i=jiffies+2, j=10;
   while(j--){
     i=jiffies;
     while(i--);
   }
+  */
 }
 
 void sleep_2ms (void) {
@@ -78,18 +78,15 @@ void msleep(unsigned long i){
 
 // Timer A0 interrupt service routine
 interrupt(TIMERA0_VECTOR) Timer_A (void){
-  LED1_LIT;
-  
   clock++;
   
   if(!clock)
     mclock++;
   if(clock>timeout){
     timer1_wrapped++;
-    LED3_LIT;
+    
+    //Power up the CPU.
     __bic_SR_register_on_exit(CPUOFF);
   }
-  //if(clock<50)
-  LED1_DIM;
   return;
 }
