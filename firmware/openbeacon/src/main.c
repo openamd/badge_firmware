@@ -167,7 +167,7 @@ int main (){
 int openbeacon(){
   u_int8_t i, status;
   u_int16_t crc=0;
-  
+  u_int8_t oldp3=0xFF;
   
   nRFCMD_Init ();
   
@@ -192,7 +192,7 @@ int openbeacon(){
       
       g_MacroBeacon.env.pkt.hdr.proto = RFBPROTO_BEACONTRACKER;
       // TODO g_MacroBeacon.env.pkt.flags = CONFIG_PIN_SENSOR ? 0 : RFBFLAGS_SENSOR;
-      g_MacroBeacon.env.pkt.flags = P3IN;
+      //g_MacroBeacon.env.pkt.flags = P3IN;
       g_MacroBeacon.env.pkt.strength = 0x55 * (i & 0x3);
       g_MacroBeacon.env.pkt.seq = htonl (seq++);
       g_MacroBeacon.env.pkt.oid = htonl (oid);
@@ -238,27 +238,33 @@ int openbeacon(){
 	LED1_LIT;
       */
       
-      // Multitouch! (strong)
-      if((P3IN^0xFF)&0x80)
-	LED3_LIT;
-      if((P3IN^0xFF)&0x18)
-	LED2_LIT;
-      if((P3IN^0xFF)&0x01)
-	LED1_LIT;
       
       
       //Reset touch sensor.
       P3OUT=0xFF;
       P3DIR=0xFF;
       
+      //Capacitance will change to show status.
+      msleep(3);
+      P3DIR=0;
+      msleep(3);
+      
+      oldp3=P3IN;
+      g_MacroBeacon.env.pkt.flags = oldp3;
+      // Multitouch! (strong)
+      if((oldp3^0xFF)&0x80)
+	LED3_LIT;
+      if((oldp3^0xFF)&0x18)
+	LED2_LIT;
+      if((oldp3^0xFF)&0x01)
+	LED1_LIT;
+      
+      
       //Sleep for a bit while I/O is outbound.
       //msleep(50); //works, twice or so per second.
-      msleep(5+(rand()&0x1F)); //Bitmasking works, modulus doesn't.  Sign extension?
+      msleep(1+(rand()&0x3F)); //Bitmasking works, modulus doesn't.  Sign extension?
       
       
-      P3DIR=0;
-      //The flag field will be set to P3IN, but not here.
-      //Capacitance will change to show 
       
       // send it away
       nRFCMD_Macro ((unsigned char *) &g_MacroBeacon);
