@@ -13,7 +13,8 @@ void timer1_init (void) {
   
   clock=mclock=0;
   
-  CCR0 = 0x100;                         // clock divider of 256
+  //CCR0 = 0x100;                         // clock divider of 256
+  CCR0 = 0x100;
   TACTL = TASSEL_1 + TACLR + MC_3 + TAIE;
   
   timer1_wrapped = 0;  
@@ -32,7 +33,7 @@ void timer1_go () {
   WDTCTL = WDTPW + WDTHOLD;             // Stop WDT
   TACTL = TASSEL1 + TACLR;              // SMCLK, clear TAR
   CCTL0 = CCIE;                         // CCR0 interrupt enabled
-  CCR0 = 0x800;                         //clock divider
+  //CCR0 = 0x200;                         //clock divider
   TACTL |= MC_3;
   _EINT();                              // Enable interrupts 
   
