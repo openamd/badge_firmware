@@ -52,8 +52,8 @@ TMacroBeacon g_MacroBeacon = {
   WR_TX_PLOAD			// Transmit Packet Opcode
 };
 
-unsigned long
-htonl (unsigned long src)
+//! Swap byte order of a long.
+unsigned long htonl (unsigned long src)
 {
   unsigned long res;
 
@@ -65,8 +65,8 @@ htonl (unsigned long src)
   return res;
 }
 
-unsigned short
-htons (unsigned short src)
+//! Swap byte order of a short.
+unsigned short htons (unsigned short src)
 {
   unsigned short res;
 
@@ -182,17 +182,19 @@ int openbeacon(){
 
   // increment code blocks to make sure that seq is higher or equal after battery
   // change
-  seq = ((u_int32_t)(code_block-1)) << 16;
+  seq = 0; //((u_int32_t)(code_block-1)) << 16;
 
   i = 0;
-  if (code_block != 0xFFFF)
+  //if (code_block != 0xFFFF)  //Adds security.
     while (1){
+      //Step transmit power.
       g_MacroBeacon.rf_setup = NRF_RFOPTIONS | ((i & 3) << 1);
       g_MacroBeacon.env.pkt.hdr.size = sizeof (TBeaconTracker);
       
       g_MacroBeacon.env.pkt.hdr.proto = RFBPROTO_BEACONTRACKER;
       // TODO g_MacroBeacon.env.pkt.flags = CONFIG_PIN_SENSOR ? 0 : RFBFLAGS_SENSOR;
       //g_MacroBeacon.env.pkt.flags = P3IN;
+      //Strength field, also describes TX power.
       g_MacroBeacon.env.pkt.strength = 0x55 * (i & 0x3);
       g_MacroBeacon.env.pkt.seq = htonl (seq++);
       g_MacroBeacon.env.pkt.oid = htonl (oid);
