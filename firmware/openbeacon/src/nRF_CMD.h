@@ -31,6 +31,7 @@
 #define NRF_MAC_SIZE 5
 
 extern void nRFCMD_Init (void);
+extern void nRFCMD_InitSniff (void);
 extern unsigned char nRFCMD_RegWrite (unsigned char reg,
 				      const unsigned char *buf,
 				      unsigned char count);
@@ -42,6 +43,7 @@ extern void nRFCMD_Stop (void);
 extern unsigned char nRFCMD_RegExec (unsigned char reg);
 extern unsigned char nRFCMD_RegReadWrite (unsigned char reg,
 					  unsigned char value);
+extern unsigned char nRFCMD_XcieveByte (unsigned char byte);
 
 
 #endif /*NRF_CMD_H */

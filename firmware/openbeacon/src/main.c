@@ -130,7 +130,9 @@ int nrf_ready(){
   return channel==81;
 }
 
+
 int openbeacon();
+int openbeaconsniff();
 
 int main (){
   // Stop WDT
@@ -158,10 +160,16 @@ int main (){
   led_startup();
   
   //Start broadcasting.
+  #ifdef SNIFFER
+  openbeaconsniff();
+  #endif
+  
+  //Start broadcasting.
   openbeacon();
 
   return 0;
 }
+
 
 //! Entry point to the openbeacon app.
 int openbeacon(){
@@ -263,10 +271,7 @@ int openbeacon(){
       
       
       //Sleep for a bit while I/O is outbound.
-      //msleep(50); //works, twice or so per second.
       msleep(1+(rand()&0x3F)); //Bitmasking works, modulus doesn't.  Sign extension?
-      
-      
       
       // send it away
       nRFCMD_Macro ((unsigned char *) &g_MacroBeacon);
@@ -297,5 +302,66 @@ int openbeacon(){
     LED3_LIT;
     sleep_jiffies (5 * TIMER1_JIFFIES_PER_MS);
     LED3_DIM;
+  }
+}
+
+//! Macro to receive a packet.
+const unsigned char g_MacroRecv[] = {
+  0x02, CONFIG | WRITE_REG, NRF_CONFIG_PRIM_RX | NRF_CONFIG_PWR_UP,
+  //0x02, STATUS | WRITE_REG, 0x70,	// reset status
+  0x00
+};
+
+//! Listen for packets as part of radio test.
+int openbeaconsniff(){
+  u_int8_t i;
+  u_int8_t packet[16];
+  u_int8_t status;
+  
+  //Enter receiver mode.
+  nRFCMD_InitSniff ();
+  nRFCMD_Macro ((unsigned char *) &g_MacroRecv);
+  
+
+  i = 0;
+  while (1){
+    
+    //Enter receiver mode.
+    nRFCMD_InitSniff ();
+    nRFCMD_Macro ((unsigned char *) &g_MacroRecv);
+  
+    
+    //Wait a bit.
+    LED3_DIM;
+    P5OUT|=CE;
+    msleep(3000L); //0.1s
+    P5OUT&=~CE;
+    LED3_LIT;
+    
+    
+    P5OUT|=CE;
+    //Get the packet.
+    P5OUT&=~CSN;
+    nRFCMD_XcieveByte(RD_RX_PLOAD);
+    for(i=0;i<32;i++)
+      nRFCMD_XcieveByte(0xde);
+    P5OUT|=CSN;
+    
+    
+    nRFCMD_RegRead(STATUS,&status,1);
+    if(status&0x40){
+      // Packet is waiting
+      
+      // Clear the flag.
+      status=0x40;
+      nRFCMD_RegWrite(STATUS,&status,1);
+      // blink led
+      P1OUT^=1;
+      //Flush buffer
+      nRFCMD_RegRead(0xE2,&packet,16);
+      LED2_LIT;
+    }
+    
+
   }
 }

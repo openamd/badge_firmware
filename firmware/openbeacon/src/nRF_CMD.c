@@ -35,14 +35,14 @@
 //|NRF_CONFIG_CRCO, fixes alignment but breaks receiver
 #define NRF_CONFIG_BYTE (NRF_CONFIG_EN_CRC)
 
-// first byte payload size+1, second byte register, 3..n-th byte payload
+//! first byte payload size+1, second byte register, 3..n-th byte payload
 const unsigned char g_MacroInitialization[] = {
   0x01, OP_NOP,
   0x02, CONFIG     | WRITE_REG, 0x00,	// stop nRF
   0x02, EN_AA      | WRITE_REG, 0x00,	// disable ShockBurst(tm)
   0x02, EN_RXADDR  | WRITE_REG, 0x01,	// enable RX pipe address 0
   0x02, SETUP_AW   | WRITE_REG, NRF_MAC_SIZE - 2,	// setup MAC address width to NRF_MAC_SIZE
-  0x02, RF_CH      | WRITE_REG, CONFIG_DEFAULT_CHANNEL,	// set channel to 2480MHz
+  0x02, RF_CH      | WRITE_REG, CONFIG_DEFAULT_CHANNEL,	// set channel to 2481MHz
   0x02, RF_SETUP   | WRITE_REG, NRF_RFOPTIONS,	// update RF options
   0x02, STATUS     | WRITE_REG, 0x78,	// reset status register
   0x06, RX_ADDR_P0 | WRITE_REG, 'O', 'C', 'A', 'E', 'B',	// set RX_ADDR_P0 to "BEACO"
@@ -50,6 +50,24 @@ const unsigned char g_MacroInitialization[] = {
   0x02, RX_PW_P0   | WRITE_REG, 16,	// set payload width of pipe 0 to sizeof(TRfBroadcast)
   0x00					// termination
 };
+
+//! Start listening for packets, used for radio tests.
+const unsigned char g_MacroSniff[] = {
+  0x01, OP_NOP,
+  0x02, CONFIG     | WRITE_REG, 0x00,	// stop nRF
+  0x02, EN_AA      | WRITE_REG, 0x00,	// disable ShockBurst(tm)
+  0x02, EN_RXADDR  | WRITE_REG, 0x01,	// enable RX pipe address 0
+  0x02, SETUP_AW   | WRITE_REG, NRF_MAC_SIZE - 2,	// setup MAC address width to NRF_MAC_SIZE
+  0x02, RF_CH      | WRITE_REG, CONFIG_DEFAULT_CHANNEL,	// set channel to 2481MHz
+  0x02, RF_SETUP   | WRITE_REG, NRF_RFOPTIONS,	// update RF options
+  0x02, STATUS     | WRITE_REG, 0x78,	// reset status register
+  0x06, TX_ADDR    | WRITE_REG, 'O', 'C', 'A', 'E', 'B',	// Swapped from beacon.
+  0x06, RX_ADDR_P0 | WRITE_REG, 0x01, 0x02, 0x03, 0x02, 0x01,
+  0x02, RX_PW_P0   | WRITE_REG, 16,	// set payload width of pipe 0 to sizeof(TRfBroadcast)
+  0x00					// termination
+};
+
+
 
 // first byte payload size+1, second byte register, 3..n-th byte payload
 const unsigned char g_MacroStart[] = {
@@ -175,9 +193,7 @@ nRFCMD_RegReadWrite (unsigned char reg, unsigned char value)
   return res;
 }
 
-void
-nRFCMD_Init (void)
-{
+void nRFCMD_Init (void) {
   /* update CPU default pin settings */
   CONFIG_PIN_CSN_LOW;
   CONFIG_PIN_CE_LOW;
@@ -188,4 +204,17 @@ nRFCMD_Init (void)
 
   /* send initialization macro to RF chip */
   nRFCMD_Macro (g_MacroInitialization);
+}
+
+void nRFCMD_InitSniff (void) {
+  /* update CPU default pin settings */
+  CONFIG_PIN_CSN_LOW;
+  CONFIG_PIN_CE_LOW;
+  CONFIG_PIN_MOSI_LOW;
+  CONFIG_PIN_SCK_LOW;
+
+  sleep_2ms ();
+
+  /* send initialization macro to RF chip */
+  nRFCMD_Macro (g_MacroSniff);
 }
