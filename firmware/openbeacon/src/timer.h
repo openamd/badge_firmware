@@ -28,7 +28,7 @@
 
 
 //Calculated for TA divisor of 0x400.
-#define TIMER1_HZ	15625L
+//#define TIMER1_HZ	15625L
 #define TIMER1_JIFFIES_PER_MS 1L
 
 void timer1_init (void);
