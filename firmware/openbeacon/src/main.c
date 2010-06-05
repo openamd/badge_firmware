@@ -132,7 +132,6 @@ int nrf_ready(){
 
 
 int openbeacon();
-int openbeaconsniff();
 
 int main (){
   // Stop WDT
@@ -145,9 +144,6 @@ int main (){
   P5DIR=MOSI+SCK+CSN+CE;//Radio outputs
   P5OUT=CSN; //chip unselected, radio off.
   
-  /* configure CPU peripherals for high-speed operation. */
-  //msp430_init_dco();  //Not needed, just wastes power.
-  
   //Load OID from Info Flash
   oid=((long*) 0xFFB0)[0];
   
@@ -159,10 +155,6 @@ int main (){
   }while(!nrf_ready());
   led_startup();
   
-  //Start broadcasting.
-  #ifdef SNIFFER
-  openbeaconsniff();
-  #endif
   
   //Start broadcasting.
   openbeacon();
@@ -312,11 +304,34 @@ const unsigned char g_MacroRecv[] = {
   0x00
 };
 
-//! Listen for packets as part of radio test.
-int openbeaconsniff(){
+
+void selftest_body();
+
+//! Alternate reset vector for testing radio.
+interrupt(RESERVED0_VECTOR)  //Entry point at 0xFFC0 on MSP430F2618.
+selftest_main(){
+  //Start stack, because we aren't coming from main().
+  asm("mov     #0x3000, r1");
+  selftest_body();
+}
+
+//! Tests for radio reception, then moves the results into the PC.
+void selftest_body(){
   u_int8_t i;
-  u_int8_t packet[16];
+  u_int8_t* packet=(u_int8_t*) 0x30f0;  //Packets are stored here.
   u_int8_t status;
+  
+  // Stop WDT
+  WDTCTL = WDTPW + WDTHOLD;
+  
+  //LED setup
+  PLEDDIR=LEDBITS;
+  PLED|=LEDBITS;
+  
+  //Pin directions
+  P5DIR=MOSI+SCK+CSN+CE;//Radio outputs
+  P5OUT=CSN; //chip unselected, radio off.
+  
   
   //Enter receiver mode.
   nRFCMD_InitSniff ();
@@ -324,6 +339,7 @@ int openbeaconsniff(){
   
 
   i = 0;
+  LED1_DIM;
   while (1){
     
     //Enter receiver mode.
@@ -358,10 +374,8 @@ int openbeaconsniff(){
       // blink led
       P1OUT^=1;
       //Flush buffer
-      nRFCMD_RegRead(0xE2,&packet,16);
+      nRFCMD_RegRead(0xE2,packet,16);
       LED2_LIT;
     }
-    
-
   }
 }

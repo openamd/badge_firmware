@@ -49,7 +49,7 @@ install: $(PROGNAME).hex
 	goodfet.msp430 run
 bsl: $(PROGNAME).hex
 	goodfet.bsl -e -p $(PROGNAME).hex
-	goodfet.bsl -P $(PROGNAME).hex -r
+	goodfet.bsl -P $(PROGNAME).hex -g 0x3100
 publish: $(PROGNAME).hex
 #	scp obj/$(PROGNAME).hex brita@10.1.0.23:/home/windows.user/Projekte/CCC/Sputnik/Firmware/
 #	cp obj/$(PROGNAME).hex /home/windows.meri/HOPE/
