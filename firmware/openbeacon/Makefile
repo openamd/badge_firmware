@@ -41,12 +41,10 @@ clean:
 
 install: $(PROGNAME).hex
 	goodfet.msp430 erase
-	goodfet.msp430 erase
-	goodfet.msp430 poke 0xFFB0 0xdead
-	goodfet.msp430 poke 0xFFB2 0xbeef
+	goodfet.msp430 serial
 	goodfet.msp430 flash $(PROGNAME).hex
 	goodfet.msp430 verify $(PROGNAME).hex
-	goodfet.msp430 run
+	goodfet.msp430 selftest
 bsl: $(PROGNAME).hex
 	goodfet.bsl -e -p $(PROGNAME).hex
 	goodfet.bsl -P $(PROGNAME).hex -g 0x3100

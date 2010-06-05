@@ -318,8 +318,12 @@ selftest_main(){
 //! Tests for radio reception, then moves the results into the PC.
 void selftest_body(){
   u_int8_t i;
-  u_int8_t* packet=(u_int8_t*) 0x30f0;  //Packets are stored here.
+  u_int8_t* packet=(u_int8_t*) 0x3000;  //Packets are stored here.
   u_int8_t status;
+  
+  for(i=0;i<0xff;i++)
+    packet[i]=0xde;
+  packet=(u_int8_t*) 0x3020;
   
   // Stop WDT
   WDTCTL = WDTPW + WDTHOLD;
@@ -350,7 +354,7 @@ void selftest_body(){
     //Wait a bit.
     LED3_DIM;
     P5OUT|=CE;
-    msleep(3000L); //0.1s
+    msleep(300L); //0.1s
     P5OUT&=~CE;
     LED3_LIT;
     
@@ -359,8 +363,8 @@ void selftest_body(){
     //Get the packet.
     P5OUT&=~CSN;
     nRFCMD_XcieveByte(RD_RX_PLOAD);
-    for(i=0;i<32;i++)
-      nRFCMD_XcieveByte(0xde);
+    for(i=0;i<16;i++)
+      packet[i]=nRFCMD_XcieveByte(0xde);
     P5OUT|=CSN;
     
     
@@ -374,8 +378,9 @@ void selftest_body(){
       // blink led
       P1OUT^=1;
       //Flush buffer
-      nRFCMD_RegRead(0xE2,packet,16);
+      nRFCMD_RegRead(0xE2,&status,0);
       LED2_LIT;
     }
+    
   }
 }
