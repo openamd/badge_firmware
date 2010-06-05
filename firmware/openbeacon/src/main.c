@@ -321,8 +321,9 @@ void selftest_body(){
   u_int8_t* packet=(u_int8_t*) 0x3000;  //Packets are stored here.
   u_int8_t status;
   
+  //Blank testing area.
   for(i=0;i<0xff;i++)
-    packet[i]=0xde;
+    packet[i]=0;
   packet=(u_int8_t*) 0x3020;
   
   // Stop WDT
@@ -341,6 +342,9 @@ void selftest_body(){
   nRFCMD_InitSniff ();
   nRFCMD_Macro ((unsigned char *) &g_MacroRecv);
   
+  
+  //Set bytes to 0xFF that must be zero.
+  packet[0]=0xFF;
 
   i = 0;
   LED1_DIM;
@@ -364,20 +368,21 @@ void selftest_body(){
     P5OUT&=~CSN;
     nRFCMD_XcieveByte(RD_RX_PLOAD);
     for(i=0;i<16;i++)
-      packet[i]=nRFCMD_XcieveByte(0xde);
+      nRFCMD_XcieveByte(0xde);
     P5OUT|=CSN;
     
     
     nRFCMD_RegRead(STATUS,&status,1);
     if(status&0x40){
-      // Packet is waiting
+      // Clear the packet.
+      packet[0]=0;
       
       // Clear the flag.
       status=0x40;
       nRFCMD_RegWrite(STATUS,&status,1);
-      // blink led
+      // Blink led.
       P1OUT^=1;
-      //Flush buffer
+      // Flush buffer.
       nRFCMD_RegRead(0xE2,&status,0);
       LED2_LIT;
     }

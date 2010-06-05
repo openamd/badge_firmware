@@ -1,6 +1,3 @@
-#COMPILER_PATH=/usr/hitech/picc/std/9.60PL2
-#PK2=/usr/local/bin/pk2
-#CC=$(COMPILER_PATH)/bin/picc
 CC=msp430-gcc
 
 CONFIG=0x3d4
@@ -44,6 +41,10 @@ install: $(PROGNAME).hex
 	goodfet.msp430 serial
 	goodfet.msp430 flash $(PROGNAME).hex
 	goodfet.msp430 verify $(PROGNAME).hex
+	goodfet.msp430 run
+	sleep 2
+	goodfet.msp430 selftest
+test:
 	goodfet.msp430 selftest
 bsl: $(PROGNAME).hex
 	goodfet.bsl -e -p $(PROGNAME).hex
@@ -55,13 +56,12 @@ publish: $(PROGNAME).hex
 	scp -P30303 obj/$(PROGNAME).sym bitmanufaktur.de:/home/wwwrun/wildcard.bitmanufaktur/www/thelasthope/
 
 verify: $(PROGNAME).hex
-	sudo $(PK2) --verify obj/$(PROGNAME).hex
+	goodfet.msp430 verify $(PROGNAME).hex
 
 counted: $(PROGNAME).hex
 	./create_counted_firmware.php
 
 on:
-	sudo $(PK2) --on
-
+	goodfet.msp430 run
 off:
-	sudo $(PK2) --off
+	goodfet.msp430 info
