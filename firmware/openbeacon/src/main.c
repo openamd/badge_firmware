@@ -320,6 +320,7 @@ void selftest_body(){
   u_int8_t i;
   u_int8_t* packet=(u_int8_t*) 0x3000;  //Packets are stored here.
   u_int8_t status;
+  int rxcount=0;
   
   //Blank testing area.
   for(i=0;i<0xff;i++)
@@ -345,7 +346,7 @@ void selftest_body(){
   
   //Set bytes to 0xFF that must be zero.
   packet[0]=0xFF;
-
+  
   i = 0;
   LED1_DIM;
   while (1){
@@ -375,7 +376,8 @@ void selftest_body(){
     nRFCMD_RegRead(STATUS,&status,1);
     if(status&0x40){
       // Clear the packet.
-      packet[0]=0;
+      if(rxcount++>3)
+	packet[0]=0;
       
       // Clear the flag.
       status=0x40;
