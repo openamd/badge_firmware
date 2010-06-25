@@ -141,8 +141,8 @@ int main (){
   PLEDDIR=LEDBITS;
   PLED|=LEDBITS;
   
-  P5DIR=MOSI+SCK+CSN+CE;//Radio outputs
-  P5OUT=CSN; //chip unselected, radio off.
+  PDIR=MOSI+SCK+CSN+CE;//Radio outputs
+  POUT=CSN; //chip unselected, radio off.
   
   //Load OID from Info Flash
   oid=((long*) 0xFFB0)[0];
@@ -335,8 +335,8 @@ void selftest_body(){
   PLED|=LEDBITS;
   
   //Pin directions
-  P5DIR=MOSI+SCK+CSN+CE;//Radio outputs
-  P5OUT=CSN; //chip unselected, radio off.
+  PDIR=MOSI+SCK+CSN+CE;//Radio outputs
+  POUT=CSN; //chip unselected, radio off.
   
   
   //Enter receiver mode.
@@ -358,19 +358,19 @@ void selftest_body(){
     
     //Wait a bit.
     LED3_DIM;
-    P5OUT|=CE;
+    POUT|=CE;
     msleep(300L); //0.1s
-    P5OUT&=~CE;
+    POUT&=~CE;
     LED3_LIT;
     
     
-    P5OUT|=CE;
+    POUT|=CE;
     //Get the packet.
-    P5OUT&=~CSN;
+    POUT&=~CSN;
     nRFCMD_XcieveByte(RD_RX_PLOAD);
     for(i=0;i<16;i++)
       nRFCMD_XcieveByte(0xde);
-    P5OUT|=CSN;
+    POUT|=CSN;
     
     
     nRFCMD_RegRead(STATUS,&status,1);

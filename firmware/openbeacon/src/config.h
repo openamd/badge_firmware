@@ -101,17 +101,30 @@
 #define CE BIT5
 
 
+#ifdef p4
+#define POUT P4OUT
+#define PDIR P4DIR
+#define PREN P4REN
+#define PIN P4IN
+#endif
+
+#ifdef p5
+#define POUT P5OUT
+#define PDIR P5DIR
+#define PREN P5REN
+#define PIN P5IN
+#endif
 
 // Port definitions, replacing PICC ones.
-#define CONFIG_PIN_CSN_HIGH P5OUT|=CSN
-#define CONFIG_PIN_CSN_LOW P5OUT&=~CSN
-#define CONFIG_PIN_CE_HIGH P5OUT|=CE
-#define CONFIG_PIN_CE_LOW P5OUT&=~CE
-#define CONFIG_PIN_MOSI_HIGH P5OUT|=MOSI
-#define CONFIG_PIN_MOSI_LOW P5OUT&=~MOSI
-#define CONFIG_PIN_SCK_HIGH P5OUT|=SCK
-#define CONFIG_PIN_SCK_LOW P5OUT&=~SCK
-#define CONFIG_PIN_MISO (P5IN&MISO?1:0)
+#define CONFIG_PIN_CSN_HIGH POUT|=CSN
+#define CONFIG_PIN_CSN_LOW POUT&=~CSN
+#define CONFIG_PIN_CE_HIGH POUT|=CE
+#define CONFIG_PIN_CE_LOW POUT&=~CE
+#define CONFIG_PIN_MOSI_HIGH POUT|=MOSI
+#define CONFIG_PIN_MOSI_LOW POUT&=~MOSI
+#define CONFIG_PIN_SCK_HIGH POUT|=SCK
+#define CONFIG_PIN_SCK_LOW POUT&=~SCK
+#define CONFIG_PIN_MISO (PIN&MISO?1:0)
 
 // TODO fix EEPROM stuff to use info B.
 #define EEPROM_READ(x) (0)

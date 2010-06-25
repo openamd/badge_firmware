@@ -1,7 +1,5 @@
 CC=msp430-gcc
 
-CONFIG=0x3d4
-CHIP=16F684
 PROGNAME=openbeacontag
 
 SRCS=main.c timer.c nRF_CMD.c xxtea.c msp430x2618.c led.c
@@ -13,11 +11,13 @@ OBJ_EXTS=p1 rlf sdb lst
 OBJ_TMP=$(foreach T, $(OBJ_EXTS), $(patsubst %.c, obj/%.$(T), $(SRCS)))
 OBJ_OUT=$(patsubst %.c, obj/%.obj, $(SRCS))
 
+port ?= p5
+
 CLEANS=$(OBJ_OUT) $(OBJ_TMP) $(PROG_FILES)
 CLEANS+=obj/startup.as obj/startup.lst obj/startup.rlf obj/$(PROGNAME).hex $(PROGNAME).hex 
 
 #COMMON_FLAGS=-q --outdir=obj --chip=$(CHIP) -m --asmlist --codeoffset=0 --warn=0 --errors=1- --char=signed --double=24
-COMMON_FLAGS=-Wall -Os -g -mmcu=msp430x2618 -Dmsp430x2618 -DGCC 
+COMMON_FLAGS=-Wall -D$(port) -Os -g -mmcu=msp430x2618 -Dmsp430x2618 -DGCC 
 CFLAGS=$(COMMON_FLAGS)
 LDFLAGS=$(COMMON_FLAGS) 
 
