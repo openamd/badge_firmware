@@ -3,6 +3,7 @@
  * OpenBeacon.org - configuration file
  *
  * Copyright 2006 Milosch Meriac <meriac@openbeacon.de>
+ * Modifications in 2010 by Travis Goodspeed <travis at radiantmachines.com>
  *
  ***************************************************************/
 
