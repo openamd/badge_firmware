@@ -1,0 +1,103 @@
+<html>
+<head>
+<title>Hope Badge USB</title>
+</head>
+
+<body>
+
+<h1>Next Hope Badge USB Modification</h1>
+
+<p>by Travis Goodspeed &lt;travis at tnbelt.com&gt;,<br />
+for use with or without a badge hacking kit distributed by Mitch Altman.</p>
+
+<h2>Introduction</h2>
+
+<p>The following instructions are for adding USB support to a Next
+Hope conference badge, model numbers of which are NHB12 and NHB12B.
+For further details see my article entitled
+<a href="http://travisgoodspeed.blogspot.com/2010/06/hacking-next-hope-badge.html">Hacking
+the Next Hope Badge</a>.</p>
+
+<p>While these instructions are not terribly complicated, the kit is
+not intended for a first-time solderer.  If you have never soldered
+before, then build a TV-B-Gone as practice before having someone help
+you assemble this kit.</p>
+
+<h2>Modification</h2>
+
+<p>First, be sure that you have both a mini USB connector and an
+FT232RL chip, as pictured below.  This are included in Mitch's
+kit.</p>
+
+<p><a href="http://www.flickr.com/photos/travisgoodspeed/4796189835/"
+title="Mini USB Connectors by Travis Goodspeed, on
+Flickr"><img src="http://farm5.static.flickr.com/4115/4796189835_81d2796af2.jpg"
+width="500" height="375" alt="Mini USB Connectors" /></a></p>
+
+<p><a href="http://www.flickr.com/photos/travisgoodspeed/4796190529/"
+title="FT232RL Chip by Travis Goodspeed, on
+Flickr"><img src="http://farm5.static.flickr.com/4119/4796190529_4b14c2728f.jpg"
+width="500" height="375" alt="FT232RL Chip" /></a></p>
+
+<p>Modify your badge by the following steps:</p>
+<ul>
+
+<li>(Optional) Use a soldering iron to remove first one side, then the
+other, of the battery clip.  If leaving the battery in place, be sure not to
+have both a battery and USB power at the same time.</li>
+
+<li>Use a Dremel tool or fine cutters to remove the two plastic nubs
+from the the Mini USB plug.  The badges as manufactured lack holes for the
+nubs, so it is necessary to remove them for mechanical compatibility.</li>
+
+<li>Fit the Mini USB connector to the board as shown in Appendix A.
+It should fit flush with the board, fitting securely after soldering.
+Solder a single of the pins first, then a second to ensure proper
+positioning.  The side plugs should be soldered last, with plenty of extra
+solder for mechanical stability.</li>
+
+<li><b>UNDER NO CIRCUMSTANCES</b> should the board be held by its USB
+connector.  If twisted as a level, the connector will come off, and it
+will not be fun to repair the board.</p>
+
+<li>Once the USB connector is properly in place, fit the FTDI chip as
+shown in Appendix A.  The circle on the chip, which indicates Pin 1,
+should be next to the "U3" text.  First, tack a single corner pin of
+the chip.  Once this is done and the chip is still positioned
+properly, tack a pin on the opposite corner with as little solder as
+possible.  Finally, after verifying that those pins are properly
+positioned, solder the remaining pins.  If any bridge, remove the
+excess solder with a coper soldering wick.</li>
+
+<li>Having these parts connected, plug the badge into your computer
+using the included USB A to Mini B cable.  You should then see a new
+USB device enumeration.  If anything gets hot, immediately unplug the
+badge and check your soldering.</li>
+
+</ul>
+
+<h2>Software</h2>
+
+<h2>Appendix A: Component Placement</h2>
+
+
+<p><a href="http://www.flickr.com/photos/travisgoodspeed/4796886774/"
+title="NHBadge USB by Travis Goodspeed, on
+Flickr"><img src="http://farm5.static.flickr.com/4095/4796886774_3da98ef486.jpg"
+width="500" height="375" alt="NHBadge USB" /></a></p>
+
+<p><a href="http://www.flickr.com/photos/travisgoodspeed/4796190529/"
+title="FT232RL Chip by Travis Goodspeed, on
+Flickr"><img src="http://farm5.static.flickr.com/4119/4796190529_4b14c2728f.jpg"
+width="500" height="375" alt="FT232RL Chip" /></a></p>
+
+
+<h2>Appendix B: Schematic</h2>
+
+<p>This is the NHB12 schematic diagram.  For modifications </p>
+
+<p><img src="nhb12a_schem.jpg" /></p>
+
+</body>
+
+</html>
