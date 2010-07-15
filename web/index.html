@@ -10,8 +10,10 @@
 <p>by Travis Goodspeed &lt;travis at tnbelt.com&gt;,<br />
 for use with or without a badge hacking kit distributed by Mitch Altman.</p>
 
-<p>This kit is best used with the 80-pin MSP430F2618 model, so switching to
-that model is recommended prior to assembly.</p>
+<p>This kit is best used with the 80-pin MSP430F2618 model, so
+switching to that model is recommended prior to assembly.  The 80-pin
+model is written as "NHB12" on the right of the badge, while the
+64-pin model is "NHB12B"</p>
 
 <h2>Introduction</h2>
 
@@ -62,7 +64,7 @@ solder for mechanical stability.</li>
 
 <li><b>UNDER NO CIRCUMSTANCES</b> should the board be held by its USB
 connector.  If twisted as a level, the connector will come off, and it
-will not be fun to repair the board.</p>
+will not be fun to repair the board.</li>
 
 <li>Once the USB connector is properly in place, fit the FTDI chip as
 shown in Appendix A.  The circle on the chip, which indicates Pin 1,
@@ -93,7 +95,7 @@ support.
 <p>To reflash your badge's OpenBeacon firmware, grab the NHBadge
 project from subversion.  The Unix command for this is ``<i>svn co
 https://nhbadge.svn.sourceforge.net/svnroot/nhbadge</i>''.  (TortoiseSVN will
-retrieve the same URL for Windows users.)http://tinyurl.com/).  Inside
+retrieve the same URL for Windows users.)  Inside
 the <i>nhbadge/dist</i> path, one will find the latest Next Hope badge firmware
 along with Windows batch scripts for programming the badges.  Unix users with
 a C compiler and GoodFET and instead run ``<i>goodfet.bsl -e -p foo.hex</i>'' to compile the firmware
@@ -114,7 +116,15 @@ either 'goodfet.bsl -e -p goodfet2618.hex' or 'GFBSL.EXE -e -p goodfet2618.hex'.
 
 <p>Once flashed with firmware, the badge will respond to
 'goodfet.monitor info' ('GFMON.EXE info' on Windows) with its model
-number and clock calibrations.
+number and clock calibrations.</p>
+
+<p>You can then use 'goodfet.nrf sniffob' to packet sniff the rest of
+the badge network or 'goodfet.nrf snifftp' to sniff traffic from
+Turning Point Clickers.  Read my articles
+on <a href="http://travisgoodspeed.blogspot.com/2010/06/hacking-next-hope-badge.html">Hacking
+the Next Hope Badge</a>
+and <a href="http://travisgoodspeed.blogspot.com/2010/07/reversing-rf-clicker.html">Reversing
+and RF Clicker</a> for details.</p>
 
 <h2>Appendix A: Component Placement</h2>
 
@@ -132,7 +142,8 @@ width="500" height="375" alt="FT232RL Chip" /></a></p>
 
 <h2>Appendix B: Schematic</h2>
 
-<p>This is the NHB12 schematic diagram.  For modifications </p>
+<p>This is the NHB12 schematic diagram.  For modifications, the `Do
+Not Populate' section will be populated.</p>
 
 <p><img src="nhb12a_schem.jpg" /></p>
 
