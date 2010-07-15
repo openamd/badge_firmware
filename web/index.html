@@ -10,6 +10,9 @@
 <p>by Travis Goodspeed &lt;travis at tnbelt.com&gt;,<br />
 for use with or without a badge hacking kit distributed by Mitch Altman.</p>
 
+<p>This kit is best used with the 80-pin MSP430F2618 model, so switching to
+that model is recommended prior to assembly.</p>
+
 <h2>Introduction</h2>
 
 <p>The following instructions are for adding USB support to a Next
@@ -21,7 +24,8 @@ the Next Hope Badge</a>.</p>
 <p>While these instructions are not terribly complicated, the kit is
 not intended for a first-time solderer.  If you have never soldered
 before, then build a TV-B-Gone as practice before having someone help
-you assemble this kit.</p>
+you assemble this kit.  Additionally, some Unix or command-line Windows
+experience is necessary, as the tools involved do not have a GUI.</p>
 
 <h2>Modification</h2>
 
@@ -76,7 +80,41 @@ badge and check your soldering.</li>
 
 </ul>
 
-<h2>Software</h2>
+<h2>Driver</h2>
+
+The FTDI Virtual Comm Port (VCP) driver for Windows and Mac can be
+found
+at <a href="http://www.ftdichip.com/Drivers/VCP.htm">http://www.ftdichip.com/Drivers/VCP.htm</a>,
+while Linux and OpenBSD distributions generally ship with built-in
+support.
+
+<h2>OpenBeacon Firmware</h2>
+
+<p>To reflash your badge's OpenBeacon firmware, grab the NHBadge
+project from subversion.  The Unix command for this is ``<i>svn co
+https://nhbadge.svn.sourceforge.net/svnroot/nhbadge</i>''.  (TortoiseSVN will
+retrieve the same URL for Windows users.)http://tinyurl.com/).  Inside
+the <i>nhbadge/dist</i> path, one will find the latest Next Hope badge firmware
+along with Windows batch scripts for programming the badges.  Unix users with
+a C compiler and GoodFET and instead run ``<i>goodfet.bsl -e -p foo.hex</i>'' to compile the firmware
+and flash a firmware image over USB.</p>
+
+<p>To make things a bit easier, a ZIP file distribution for Windows users is available at
+<a href="http://goodserv.cis.upenn.edu/nhdist.zip">http://goodserv.cis.upenn.edu/nhdist.zip</a>.
+This is the exact file that was sent to the manufacturer, and was the
+file used on the production line to program these things.</p>
+
+<h2>GoodFET Firmware</h2>
+
+<p>To download the GoodFET firmware for either Unix or Windows,
+visit <a href="http://goodfet.sourceforge.net/">http://goodfet.sf.net/</a> and follow
+the SVN instructions.  Once installed, you can flash the GoodFET firmware to the badge with
+either 'goodfet.bsl -e -p goodfet2618.hex' or 'GFBSL.EXE -e -p goodfet2618.hex'.
+<p>
+
+<p>Once flashed with firmware, the badge will respond to
+'goodfet.monitor info' ('GFMON.EXE info' on Windows) with its model
+number and clock calibrations.
 
 <h2>Appendix A: Component Placement</h2>
 
