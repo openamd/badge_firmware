@@ -1,0 +1,3 @@
+#!/bin/sh
+echo "Be sure to set port=p4 for 64-pin boards."
+echo "port=p5 is default for 80-pin units."
